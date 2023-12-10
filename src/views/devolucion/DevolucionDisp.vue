@@ -2,76 +2,45 @@
     <div>
 
         <v-card class="mx-auto" max-width="890" elevation="15" style="margin-top: 50px;">
-
             <v-card-title class="crear" style="margin-left: 37%;">
-
                 <h3> Devolucion de Equipos </h3>
-
             </v-card-title>
-
-
-
             <hr>
-
             <br>
 
             <v-card-text>
-
                 <v-row>
-
                     <v-col cols="10">
 
                         <v-autocomplete v-model="cedulaSeleccionada" dense filled rounded solo class="buscar"
                             :no-data-text="'No hay resultados'" :items="cedulauser" item-text="cedula" item-value="cedula"
                             label="CEDULA">
-
                         </v-autocomplete>
 
                     </v-col>
 
-
-
                     <v-col cols="2">
-
                         <v-btn class="mx-6" width="50px" style="margin-top: -8px;" height="50px" fab dark large
                             color="primary" @click="buscar">
 
                             <v-icon dark>
-
                                 search
-
                             </v-icon>
-
                         </v-btn>
-
                     </v-col>
-
                 </v-row>
-
             </v-card-text>
-
-
-
-
-
-
-
         </v-card>
 
         <br>
-
         <br>
 
 
 
         <v-card class="mx-auto" max-width="890" v-if="tablaPrestamo" elevation="15">
-
             <hr>
-
             <center>
-
                 <h5>Prestamos</h5>
-
             </center>
 
             <v-container>
@@ -79,191 +48,85 @@
                 <v-data-table :headers="headers" :items="DetallesPrestamos" class="tbl">
 
                     <template v-slot:item.codigo="{ item }">
-
                         {{ item.codigo }}
-
                     </template>
 
                     <template v-slot:item.fechaInicio="{ item }">
-
                         {{ formatearFechas(item.fechaInicio) }}
-
                     </template>
 
                     <template v-slot:item.fechaFin="{ item }">
-
                         {{ formatearFechas(item.fechaFin) }}
-
                     </template>
 
                     <template v-slot:item.tipoEquipo="{ item }">
-
                         {{ item.tipoEquipo }}
-
                     </template>
-
-
 
                     <template v-slot:item.serial="{ item }">
-
                         {{ item.serial }}
-
                     </template>
 
-
-
-                    <template v-slot:item.estadoEquipo="{ item }">
-
-                        {{ item.estadoEquipo }}
-
+                    <template v-slot:item.estadoPrestamo="{ item }">
+                        {{ item.estadoPrestamo }}
                     </template>
 
-
-
-
-
-
-
-
-
-
-
-                    <template>
-
-                        <v-select class="select"></v-select>
-
-                    </template>
-
-
-
-
-
-
-
-                    <template v-slot:item.accion="" v-slot:activator="{ on, attrs }">
-
+                    <template v-slot:item.accion="{ item }">
                         <v-icon small class="mr-2" v-on="on" v-bind="attrs"
-                            @click="dialog = true">mdi-text-box-search</v-icon>
-
+                            @click="MostrarDialogoObservacion(item)">reviews</v-icon>
                     </template>
-
-
 
                 </v-data-table>
-
-
 
             </v-container>
 
             <br>
-
-
-
         </v-card>
 
         <br>
-
         <br>
 
-        <div class="text-center" v-if="tablaPrestamo">
 
-            <v-dialog v-model="dialog" width="500">
-
-                <v-card class="descripcion">
-
-                    <v-card-title class="text-h5 grey lighten-2">
-
-                        Descripción
-
-                    </v-card-title>
-
-                    <center>
-
-                        <v-textarea style="width: 400px; " v-model="descripcion" label="escriba aquí"></v-textarea>
-
-                    </center>
-
-                    <v-card-actions>
-
-                        <v-spacer></v-spacer>
-
-                        <v-btn color="primary" text @click="dialog = false">
-
-                            Cerrar
-
-                        </v-btn>
-
-                        <v-btn color="blue darken-1" text @click="confirmarEdit">
-
-                            Confirmar
-
-                        </v-btn>
-
-                    </v-card-actions>
-
-                </v-card>
-
-            </v-dialog>
-
-        </div>
 
         <v-dialog v-model="dialog" max-width="500px">
-
             <v-card>
 
                 <v-card-title>
-
-                    <span class="text-h5">{{ }}</span>
-
+                    <span class="text-h5">Devolucion de Equipo</span>
                 </v-card-title>
 
-
-
                 <v-card-text>
-
                     <v-container>
-
                         <v-row>
-
-
-
                             <v-col cols="12">
-
-                                <v-select v-model="estadosDelPrestamo.estadoEquipo" :items="estadosDelPrestamo"
-                                    item-text="Estado" item-value="id" label="Estado" required dense outlined></v-select>
-
+                                <v-select v-model="estadoSeleccionado" @change="mostrarObservacion" :items="items"
+                                    item-text="estado" item-value="id" :rules="[(v) => !!v || 'Campo requerido']"
+                                    label="Estado" required>
+                                </v-select>
                             </v-col>
-
-
-
                         </v-row>
 
+                        <v-row v-if="mostrarCampoDeObservacion">
+                            <v-col cols="12">
+                                <v-textarea :rules="nameRules" clearable style="width: 400px;" variant="solo"
+                                    v-model="observacion" label="Descripcion de la observacion"></v-textarea>
+                            </v-col>
+                        </v-row>
                     </v-container>
-
                 </v-card-text>
 
-
-
                 <v-card-actions>
-
                     <v-spacer></v-spacer>
-
                     <v-btn color="red darken-1" text @click="cancel">
-
                         Cancel
-
                     </v-btn>
 
                     <v-btn color="blue darken-1" text @click="confirmarEdit">
-
                         Confirmar
-
                     </v-btn>
-
                 </v-card-actions>
 
             </v-card>
-
         </v-dialog>
 
     </div>
@@ -274,249 +137,187 @@
 <script>
 
 import axios from 'axios';
-
 import Swal from "sweetalert2";
 
 export default {
 
     data: () => ({
-
-
-
-
-
-
-
-
-
         headers: [
 
             { text: 'Código', value: 'codigo' },
-
             { text: 'Fecha Inicio', value: 'fechaInicio' },
-
             { text: 'Fecha Fin', value: 'fechaFin' },
-
             { text: 'Tipo', value: 'tipoEquipo' },
-
             { text: 'Serial', value: 'serial' },
-
-            { text: 'Estado', value: 'estadoEquipo' },
-
-            { text: 'Bueno', value: 'bueno' },
-
-            { text: 'Malo', value: 'malo' },
-
-            { text: 'Descripcion', value: 'accion' },
+            { text: 'Estado', value: 'estadoPrestamo' },
+            { text: 'accion', value: 'accion' },
 
         ],
 
         data: [],
-
         tablaPrestamo: false,
-
+        mostrarCampoDeObservacion: false,
+        observacionPrestamo: false,
+        observacion: "",
         tablaDetalle: false,
-
         dialog: false,
-
         checkbox2: false,
-
-
-
         cedulaSeleccionada: null,
-
         cedulauser: [],
-
         DetallesPrestamos: [],
-
         estadosDelPrestamo: [],
-
+        estadoSeleccionado: null,
         prestamos: [],
-
-
-
+        items: [],
+        detalleSeleccionado: [],
+        nameRules: [(v) => !!v || "Indique una observacion"],
     }),
-
-    watch: {
-
-        dialog(val) {
-
-            val || this.close()
-
-        },
-
-        dialogDelete(val) {
-
-            val || this.closeDelete()
-
-        },
-
-    },
-
 
 
     methods: {
 
-
-
-
-
         async buscar() {
-
             if (this.cedulaSeleccionada) {
-
                 try {
 
                     const response = await axios.get('http://localhost:62000/prestamos/obtener_prestamo/' + this.cedulaSeleccionada);
-
                     this.prestamos = response.data;
-
                     if (this.prestamos.length === 0) {
 
                         this.tablaDetalle = false;
-
                         this.cedulaSeleccionada = null;
-
                         Swal.fire('La cedula seleccionada no tiene prestamos asignados!', '', 'error');
 
                     } else {
 
                         this.tablaPrestamo = true;
-
                         this.prestamos.forEach(prestamo => {
-
                             prestamo.prestamo_detalle.forEach(detalle => {
-
                                 const detallePrestamo = {
-
                                     codigo: detalle.equipo.codigo,
-
                                     serial: detalle.equipo.serial,
-
                                     fechaInicio: detalle.fecha_prestamo,
-
                                     fechaFin: detalle.fecha_devolucion,
-
                                     tipoEquipo: detalle.equipo.tipo.tipo,
-
-                                    estadoEquipo: prestamo.estado_prestamo.Estado
-
+                                    estadoEquipo: detalle.equipo.estado.estado,
+                                    IdEstadoEquipo: detalle.equipo.estado.id,
+                                    estadoPrestamo: prestamo.estado_prestamo.Estado
                                 };
-
                                 this.DetallesPrestamos.push(detallePrestamo);
-
                             });
-
                         });
-
                         console.log(this.DetallesPrestamos);
-
                     }
 
                 } catch (error) {
 
                     console.error('Error al obtener detalles de préstamo:' + error);
-
                     Swal.fire('Error al obtener detalles de préstamo', '' + error, 'error');
 
                 }
 
-
-
-
-
             } else {
-
                 Swal.fire('No ha seleccionado una cedula', '', 'error');
-
             }
-
-
-
-
 
         },
 
-
-
         async prestamocedula() {
-
             await axios.get('http://localhost:62000/usuarios/obtener').then(resp => {
-
                 this.cedulauser = resp.data;
-
                 if (this.cedulauser.length > 0) {
-
                     this.cedulaSeleccionada = this.cedulauser.cedula;
-
                 }
-
             });
 
         },
 
         async estadosprestamos() {
-
             await axios.get('http://localhost:62000/estadoprestamo/obtener').then(resp => {
-
                 this.estadosDelPrestamo = resp.data;
-
                 console.log(this.estadosDelPrestamo);
 
             });
-
         },
-
-
-
-
-
-
+        async estadosDelEquipo() {
+            axios.get('http://localhost:62000/estadoequipo/obtener').then(response => {
+                console.log(response.data);
+                if (response.data.length > 0) {
+                    console.log(response.data)
+                    this.items = response.data;
+                    console.log('aqui', this.items)
+                }
+            });
+        },
+        MostrarDialogoObservacion(item) {
+            this.detalleSeleccionado = [item];
+            this.dialog = true;
+            console.log('Detalle del prestamo seleccionado', this.detalleSeleccionado);
+        },
 
         MostrarDetalles() {
-
             this.tablaDetalle = true;
-
         },
 
+        mostrarObservacion(itemSeleccionado) {
+            if (itemSeleccionado !== this.items[0].id) {
+                this.mostrarCampoDeObservacion = true;
+            } else {
+                this.mostrarCampoDeObservacion = false;
+                if (this.$refs.estadoSeleccionado) {
+                    this.$refs.estadoSeleccionado.resetValidation();
+                }
+                this.observacion = "";
+            }
+        },
+        onSelectChange() {
 
-
+        },
+        limpiarObservacion() {
+            this.observacion = "";
+        },
         EditarEstado() {
-
             this.dialog = true;
-
         },
 
         cancel() {
-
             this.dialog = false;
-
         },
 
         async confirmarEdit() {
+            if (this.observacion.trim() === "") {
+                Swal.fire("Error", "La observación es obligatoria", "error");
+                return;
+            } else {
+                try {
+                    let idDelEstado = this.estadoSeleccionado;
+                    let idDelEquipo = this.detalleSeleccionado[0].codigo;
 
+                    console.log('codigo a enviar', idDelEquipo);
+                    console.log('idEstado a enviar', idDelEstado);
+                    await axios.put(`localhost:62000/equipos/actualizar_por_codigo/${idDelEquipo}/${idDelEstado}`).then({
+                        
+                    }).finally({
+                        
+                    })
+                    this.dialog = false;
+                } catch (error) {
+                    console.error('aqui', error);
+                }
+            }
         },
 
         formatearFechas(date) {
-
             const Fechasformateadas = new Date(date).toLocaleString();
-
             return Fechasformateadas;
-
-
-
         },
-
-
 
     },
 
     mounted() {
-
         this.prestamocedula();
-
         this.estadosprestamos();
-
+        this.estadosDelEquipo();
     },
 
 };
