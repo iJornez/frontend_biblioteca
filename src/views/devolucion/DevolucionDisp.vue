@@ -67,10 +67,6 @@
                         {{ item.serial }}
                     </template>
 
-                    <template v-slot:item.estadoPrestamo="{ item }">
-                        {{ item.estadoPrestamo }}
-                    </template>
-
                     <template v-slot:item.accion="{ item }">
                         <v-icon small class="mr-2" v-on="on" v-bind="attrs"
                             @click="MostrarDialogoObservacion(item)">reviews</v-icon>
@@ -149,7 +145,6 @@ export default {
             { text: 'Fecha Fin', value: 'fechaFin' },
             { text: 'Tipo', value: 'tipoEquipo' },
             { text: 'Serial', value: 'serial' },
-            { text: 'Estado', value: 'estadoPrestamo' },
             { text: 'accion', value: 'accion' },
 
         ],
@@ -201,7 +196,8 @@ export default {
                                     tipoEquipo: detalle.equipo.tipo.tipo,
                                     estadoEquipo: detalle.equipo.estado.estado,
                                     IdEstadoEquipo: detalle.equipo.estado.id,
-                                    estadoPrestamo: prestamo.estado_prestamo.Estado
+                                    estadoPrestamo: prestamo.estado_prestamo.Estado,
+                                    idPrestamo: prestamo.id
                                 };
                                 this.DetallesPrestamos.push(detallePrestamo);
                             });
@@ -260,7 +256,7 @@ export default {
         },
 
         mostrarObservacion(itemSeleccionado) {
-            if (itemSeleccionado !== this.items[0].id) {
+            if (itemSeleccionado !== this.items[0].id && itemSeleccionado !== this.items[2].id) {
                 this.mostrarCampoDeObservacion = true;
             } else {
                 this.mostrarCampoDeObservacion = false;
@@ -269,9 +265,6 @@ export default {
                 }
                 this.observacion = "";
             }
-        },
-        onSelectChange() {
-
         },
         limpiarObservacion() {
             this.observacion = "";
@@ -285,20 +278,25 @@ export default {
         },
 
         async confirmarEdit() {
-            if (this.observacion.trim() === "") {
+            const estadoEquipo = this.items.find(estadoEquipo => estadoEquipo.id == this.estadoSeleccionado);
+            console.log(estadoEquipo);
+            if (this.observacion.trim() === "" && estadoEquipo.estado.toLowerCase() != "bueno") {
                 Swal.fire("Error", "La observación es obligatoria", "error");
                 return;
             } else {
                 try {
                     let idDelEstado = this.estadoSeleccionado;
                     let idDelEquipo = this.detalleSeleccionado[0].codigo;
-
                     console.log('codigo a enviar', idDelEquipo);
                     console.log('idEstado a enviar', idDelEstado);
-                    await axios.put(`localhost:62000/equipos/actualizar_por_codigo/${idDelEquipo}/${idDelEstado}`).then({
-                        
-                    }).finally({
-                        
+                    const paquete = {
+                        idPrestamo: parseInt(this.detalleSeleccionado[0].idPrestamo),
+                        equipos: [{ idEquipo: parseInt(idDelEquipo), idEstado: parseInt(idDelEstado), descripcion: this.observacion }]
+                    }
+                    await axios.put('http://localhost:62000/prestamos/devolucion', paquete).then(resp => {
+                        console.log(resp.data);
+                    }).catch(error => {
+                        console.log('Error de peticion' + error);
                     })
                     this.dialog = false;
                 } catch (error) {

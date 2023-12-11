@@ -114,9 +114,6 @@
       <v-card v-if="MostrarTabla" class="" elevation="15" max-width="900">
         <v-data-table :headers="headers" :items="datosPreGuardados" :items-per-page="5" class="elevation-1">
           <template v-slot:item.actions="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)">
-              mdi-pencil
-            </v-icon>
             <v-icon small @click="abrirEliminar(item)">
               mdi-delete
             </v-icon>

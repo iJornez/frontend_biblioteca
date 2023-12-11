@@ -185,38 +185,7 @@
             </v-card-actions>
           </v-card>
 
-          <v-card class="mx-auto carta2" max-width="500">
-            <v-img class="white--text align-end" height="400px" width="500px"
-              src="https://www.techspring.mx/wp-content/uploads/2020/04/Lld-proyector-destacada.jpg">
-              <v-card-title>Prestamo de video beam</v-card-title>
-            </v-img>
-
-            <v-card-subtitle class="pb-0">
-
-
-              ¿Cómo se utilizan las video beam?
-
-            </v-card-subtitle>
-
-            <v-card-text class="text--primary">
-
-
-
-              <div>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Praesentium corrupti voluptatem numquam beatae
-                vero, consequuntur sed, commodi molestiae est voluptas rerum modi? Neque ipsum nam natus nobis aliquid
-                voluptate odio!</div>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-btn color="orange" text>
-                Share
-              </v-btn>
-
-              <v-btn color="orange" text>
-                Explore
-              </v-btn>
-            </v-card-actions>
-          </v-card>
+     
 
           <v-card class="mx-auto carta3" max-width="600">
             <v-img class="white--text align-end" height="400px" width="500px"
@@ -253,30 +222,13 @@
           <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
             <!-- Left -->
             <div class="me-5 d-none d-lg-block">
-              <span class="color">Get connected with us on social networks:</span>
+              <a href="https://oferta.senasofiaplus.edu.co/sofia-oferta/">Biblioteca Sena</a>
             </div>
             <!-- Left -->
 
             <!-- Right -->
             <div>
-              <a href="" class="me-4 text-reset">
-                <i class=" color fab fa-facebook-f"></i>
-              </a>
-              <a href="" class="me-4 text-reset">
-                <i class=" color fab fa-twitter"></i>
-              </a>
-              <a href="" class="me-4 text-reset">
-                <i class=" color fab fa-google"></i>
-              </a>
-              <a href="" class="me-4 text-reset">
-                <i class="color fab fa-instagram"></i>
-              </a>
-              <a href="" class="me-4 text-reset">
-                <i class="color fab fa-linkedin"></i>
-              </a>
-              <a href="" class="me-4 text-reset">
-                <i class="color fab fa-github"></i>
-              </a>
+           
             </div>
             <!-- Right -->
           </section>
@@ -290,12 +242,10 @@
                 <!-- Grid column -->
                 <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
                   <!-- Content -->
-                  <h6 class="text-uppercase fw-bold mb-4" style="color:orange;">
-                    <i class=" color fas fa-gem me-3"></i>Company name
-                  </h6>
+                  <h6 class="text-uppercase fw-bold mb-4" style="color:rgb(101, 99, 99);">
+                    <i class=" color fas fa-gem me-3"></i> biblioteca prestacional SENA                  </h6>
                   <p class=" color">
-                    Here you can use rows and columns to organize your footer content. Lorem ipsum
-                    dolor sit amet, consectetur adipisicing elit.
+                    Una biblioteca prestacional se encarga de proporcionar acceso a una amplia variedad de recursos y materiales para el préstamo a sus usuarios. Su objetivo principal es ofrecer servicios que promuevan el acceso equitativo a la información, el conocimiento y la cultura.
                   </p>
                 </div>
                 <!-- Grid column -->
@@ -303,20 +253,20 @@
                 <!-- Grid column -->
                 <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
                   <!-- Links -->
-                  <h6 class="color text-uppercase fw-bold mb-4" style="color:orange;">
-                    Products
+                  <h6 class="color text-uppercase fw-bold mb-4" style="color:rgb(90, 88, 88);">
+                    Dispositivos
                   </h6>
                   <p class="color ">
-                    <a href="#!" class=" text-reset">Angular</a>
+                    <a href="#!" class=" text-reset">Portatil</a>
                   </p>
                   <p class="color ">
-                    <a href="#!" class="color text-reset">React</a>
+                    <a href="#!" class="color text-reset">Mouse</a>
                   </p>
                   <p class="color ">
-                    <a href="#!" class="color text-reset">Vue</a>
+                    <a href="#!" class="color text-reset">Teclado</a>
                   </p>
                   <p class="color ">
-                    <a href="#!" class=" text-reset">Laravel</a>
+                    <a href="#!" class=" text-reset">cargador</a>
                   </p>
                 </div>
                 <!-- Grid column -->
@@ -324,7 +274,7 @@
                 <!-- Grid column -->
                 <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
                   <!-- Links -->
-                  <h6 class="color  text-uppercase fw-bold mb-4" style="color:orange;">
+                  <h6 class="color  text-uppercase fw-bold mb-4" style="color:rgb(89, 87, 87)">
                     Useful links
                   </h6>
                   <p class="color ">
@@ -345,14 +295,14 @@
                 <!-- Grid column -->
                 <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
                   <!-- Links -->
-                  <h6 class="text-uppercase fw-bold mb-4" style="color:orange;">Contact</h6>
-                  <p class="color "><i class="fas fa-home me-3"></i> New York, NY 10012, US</p>
+                  <h6 class="text-uppercase fw-bold mb-4" style="color:rgb(95, 92, 92)">Contact</h6>
+                  <p class="color "><i class="fas fa-home me-3"></i> Monteria</p>
                   <p class="color ">
                     <i class="fas fa-envelope me-3"></i>
-                    info@example.com
+                    biblioteca@gmail.com
                   </p>
-                  <p class="color "><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
-                  <p class="color "><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
+                  <p class="color "><i class="fas fa-phone me-3"></i> 3043742255</p>
+                  <p class="color "><i class="fas fa-print me-3"></i> 3298463567</p>
                 </div>
                 <!-- Grid column -->
               </div>
@@ -363,8 +313,8 @@
 
           <!-- Copyright -->
           <div class="color text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
-            © 2021 Copyright:
-            <a class="text-reset fw-bold color" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+             2024 SENA:
+            <a class="text-reset fw-bold color" href="https://mdbootstrap.com/">biblioteca.com</a>
           </div>
           <!-- Copyright -->
         </footer>

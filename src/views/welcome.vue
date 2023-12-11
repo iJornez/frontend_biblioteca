@@ -60,7 +60,7 @@
 
 
 
-  margin-top: 20%;
+  margin-top: 10%;
 
   padding: 20px;
 
@@ -70,7 +70,7 @@
 
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
-  background-color: #a8a0a0;
+  background-color: #e7e4e4;
 
 }
 
