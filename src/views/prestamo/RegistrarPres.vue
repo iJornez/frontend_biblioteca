@@ -9,7 +9,12 @@
           <v-row>
             <v-col cols="12">
               <v-select v-model="paquete.usuario" :rules="[v => !!v || 'campo requerido']" :items="usuarios"
-                item-value="cedula" item-text="nombre" label="Usuario" required></v-select>
+                item-value="cedula" item-text="datosCombinados" label="Usuario" required></v-select>
+              <template #item="{ item }">
+                <div>
+                  <span>{{ item.nombre }} - {{ item.cedula }}</span>
+                </div>
+              </template>
             </v-col>
 
             <v-col cols="6">
@@ -108,22 +113,49 @@
       </v-card-text>
 
     </v-card>
+
     <br>
     <br>
-    <center>
-      <v-card v-if="MostrarTabla" class="" elevation="15" max-width="900">
-        <v-data-table :headers="headers" :items="datosPreGuardados" :items-per-page="5" class="elevation-1">
+
+    <v-card class="mx-auto" v-if="MostrarTabla" max-width="900" elevation="15">
+      <center>
+        <v-data-table :headers="headers" :items="datosPreGuardados" :items-per-page="5" class="elevation-8">
+
+          <template v-slot:item.nombre="{ item }">
+            {{ item.tipo.nombre }}
+          </template>
+
+          <template v-slot:item.cantidad="{ item }">
+            {{ item.cantidad }}
+          </template>
+
+          <template v-slot:item.usuario="{ item }">
+            {{ item.usuario }}
+          </template>
+
+          <template v-slot:item.fechainicio="{ item }">
+            {{ item.fechainicio }}
+          </template>
+
+          <template v-slot:item.fechafinal="{ item }">
+            {{ item.fechafinal }}
+          </template>
+
           <template v-slot:item.actions="{ item }">
             <v-icon small @click="abrirEliminar(item)">
               mdi-delete
             </v-icon>
           </template>
+
           <template v-slot:no-data>
             Sin prestamos almacenados
           </template>
         </v-data-table>
-      </v-card>
-    </center>
+
+
+      </center>
+    </v-card>
+
     <v-dialog v-model="dialogEliminar" max-width="500px">
       <v-card>
         <v-card-title>
@@ -155,6 +187,7 @@
 
     <br>
     <br>
+
     <center>
       <div class="botones ">
         <v-btn class="registrar" v-if="MostrarTabla" :disabled="dialog" :loading="dialog" color="primary" @click="enviar">
@@ -183,7 +216,7 @@ export default {
     MostrarTabla: false,
     dialog: false,
     headers: [
-      { text: 'Tipo', value: 'tipo' },
+      { text: 'Tipo', value: 'tipo.nombre' },
       { text: 'Cantidad', value: 'cantidad' },
       { text: 'Usuario', value: 'usuario' },
       { text: 'Fecha inicio', value: 'fechainicio' },
@@ -233,7 +266,7 @@ export default {
         estado_prestamo: 1,
         detalle: [
           {
-            tipo: this.datosPreGuardados[0].tipo,
+            tipo: this.datosPreGuardados[0].tipo.id,
             cantidad: this.datosPreGuardados[0].cantidad,
           }
         ]
@@ -251,14 +284,90 @@ export default {
         .catch(error => {
           setTimeout(() => {
             this.dialog = false;
-            if (error.response && error.response.data === 'vacio') {
-              Swal.fire('No hay equipos disponibles en las fechas seleccionadas', '', 'error');
+            if (error.response && error.response.data && error.response.data.error) {
+              Swal.fire('Error', error.response.data.error, 'error');
             } else {
-              Swal.fire('', 'No se pudo guardar el préstamo. ' + error, 'error');
+              Swal.fire('', 'No se pudo guardar el préstamo debido a conflictos de fecha o disponibilidad de equipos', 'error');
+              this.limpiarDatos();
+              this.VaciarStorage();
             }
           }, 2500)
         });
+      console.log('Paquete para prestar', paquetePrestamo);
     },
+
+    async almacenar() {
+      if (this.$refs.form.validate()) {
+        const IdTipoSeleccionado = this.paquete.tipo;
+        await axios.get(`http://localhost:62000/equipos/obtenerBuenos/${IdTipoSeleccionado}/1`).then(response => {
+          const EquiposDisponibles = response.data.length;
+          const CantidadSeleccionada = this.paquete.cantidad;
+          if (CantidadSeleccionada > EquiposDisponibles) {
+            Swal.fire({
+              icon: 'warning',
+              title: 'Cantidad no disponible',
+              text: `La cantidad seleccionada no está disponible. Cantidad disponible: ${EquiposDisponibles}`,
+              showCancelButton: true,
+              confirmButtonText: ' Continuar',
+              cancelButtonText: 'Cancelar',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                if (EquiposDisponibles === 0) {
+                  Swal.fire('No hay equipos disponibles para este tipo.', '', 'error');
+                  this.limpiarDatos();
+                } else {
+                  this.continuarAlmacenamiento();
+                }
+              }
+            });
+          } else {
+            this.continuarAlmacenamiento();
+          }
+        }).catch(error => {
+          console.error('Error al obtener la cantidad de equipos disponibles:', error);
+          Swal.fire('Error', 'No se pudo obtener la cantidad de equipos disponibles' + error, 'error');
+        });
+      }
+    },
+
+    async continuarAlmacenamiento() {
+      this.MostrarTabla = true;
+      const IdTipoSeleccionado = this.paquete.tipo;
+      await axios.get(`http://localhost:62000/equipos/obtenerBuenos/${IdTipoSeleccionado}/1`).then(response => {
+        const EquiposDisponibles = response.data.length;
+        const CantidadSeleccionada = this.paquete.cantidad;
+        const cantidadAAlmacenar = Math.min(CantidadSeleccionada, EquiposDisponibles);
+
+        const nuevoDato = {
+          tipo: {
+            id: this.paquete.tipo,
+            nombre: this.tipoEquipo.find(tipo => tipo.id === this.paquete.tipo)?.tipo
+          },
+          cantidad: cantidadAAlmacenar,
+          usuario: this.paquete.usuario,
+          fechainicio: this.paquete.fechainicio,
+          fechafinal: this.paquete.fechafinal,
+          horaInicio: this.paquete.horaInicio,
+          horaFinal: this.paquete.horaFinal,
+        };
+
+        this.datosPreGuardados.push(nuevoDato);
+        console.log('Paquete a enviar para el préstamo', this.datosPreGuardados);
+        localStorage.setItem('datosPreGuardados', JSON.stringify(this.datosPreGuardados));
+        localStorage.setItem('mostrarTabla', JSON.stringify(this.MostrarTabla));
+        this.limpiarDatos();
+        this.$refs.form.resetValidation();
+
+        this.menu1 = false;
+        this.menu2 = false;
+        this.menu3 = false;
+        this.menu4 = false;
+      }).catch(error => {
+        console.error('Error al obtener la cantidad de equipos disponibles:', error);
+        Swal.fire('Error', 'No se pudo obtener la cantidad de equipos disponibles' + error, 'error');
+      });
+    },
+
 
     async limpiarDatos() {
       this.paquete.tipo = null;
@@ -269,36 +378,6 @@ export default {
       this.paquete.horaInicio = null;
       this.paquete.horaFinal = null;
     },
-
-
-
-    async almacenar() {
-      if (this.$refs.form.validate()) {
-        this.MostrarTabla = true;
-        const nuevoDato = {
-          tipo: this.paquete.tipo,
-          cantidad: this.paquete.cantidad,
-          usuario: this.paquete.usuario,
-          fechainicio: this.paquete.fechainicio,
-          fechafinal: this.paquete.fechafinal,
-          horaInicio: this.paquete.horaInicio,
-          horaFinal: this.paquete.horaFinal,
-        };
-
-        this.datosPreGuardados.push(nuevoDato);
-
-        localStorage.setItem('datosPreGuardados', JSON.stringify(this.datosPreGuardados));
-        localStorage.setItem('mostrarTabla', JSON.stringify(this.MostrarTabla));
-        this.limpiarDatos();
-        this.$refs.form.resetValidation();
-
-        this.menu1 = false;
-        this.menu2 = false;
-        this.menu3 = false;
-        this.menu4 = false;
-      }
-    },
-
     cargarDatosGuardados() {
       const datosGuardados = localStorage.getItem('datosPreGuardados');
       if (datosGuardados) {
@@ -310,13 +389,18 @@ export default {
       this.dialogEliminar = true;
     },
 
-    async VaciarStorage() {
+    async VaciarStorage(idDelItemAEliminar) {
       localStorage.clear();
+      this.datosPreGuardados = this.datosPreGuardados.filter(item => item.id !== idDelItemAEliminar);
+      localStorage.setItem('datosPreGuardados', JSON.stringify(this.datosPreGuardados));
+      this.MostrarTabla = false;
+      this.limpiarDatos();
     },
 
     async deleteItem() {
       this.VaciarStorage();
       this.closeDelete();
+      this.dialogEliminar = false;
     },
 
     closeDelete() {
@@ -341,6 +425,14 @@ export default {
       });
     },
   },
+  computed: {
+    NombreYCedula() {
+      return this.usuarios.map(user => ({
+        ...user,
+        datosCombinados: `${user.nombre} - ${user.cedula}`
+      }));
+    }
+  },
   watch: {
     dialog(val) {
       val || this.close()
@@ -351,6 +443,12 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete()
     },
+    NombreYCedula: {
+      immediate: true,
+      handler(newValue) {
+        this.usuarios = newValue;
+      }
+    }
   },
 
   mounted() {
@@ -390,4 +488,5 @@ export default {
 
 .cancelar {
   float: right;
-}</style>
+}
+</style>

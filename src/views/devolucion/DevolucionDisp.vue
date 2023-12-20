@@ -35,55 +35,6 @@
         <br>
         <br>
 
-
-
-        <v-card class="mx-auto" max-width="890" v-if="tablaPrestamo" elevation="15">
-            <hr>
-            <center>
-                <h5>Prestamos</h5>
-            </center>
-
-            <v-container>
-
-                <v-data-table :headers="headers" :items="DetallesPrestamos" class="tbl">
-
-                    <template v-slot:item.codigo="{ item }">
-                        {{ item.codigo }}
-                    </template>
-
-                    <template v-slot:item.fechaInicio="{ item }">
-                        {{ formatearFechas(item.fechaInicio) }}
-                    </template>
-
-                    <template v-slot:item.fechaFin="{ item }">
-                        {{ formatearFechas(item.fechaFin) }}
-                    </template>
-
-                    <template v-slot:item.tipoEquipo="{ item }">
-                        {{ item.tipoEquipo }}
-                    </template>
-
-                    <template v-slot:item.serial="{ item }">
-                        {{ item.serial }}
-                    </template>
-
-                    <template v-slot:item.accion="{ item }">
-                        <v-icon small class="mr-2" v-on="on" v-bind="attrs"
-                            @click="MostrarDialogoObservacion(item)">reviews</v-icon>
-                    </template>
-
-                </v-data-table>
-
-            </v-container>
-
-            <br>
-        </v-card>
-
-        <br>
-        <br>
-
-
-
         <v-dialog v-model="dialog" max-width="500px">
             <v-card>
 
@@ -124,6 +75,52 @@
 
             </v-card>
         </v-dialog>
+
+        <br>
+        <br>
+
+        <v-card class="mx-auto" max-width="890" v-if="tablaPrestamo" elevation="15">
+            <hr>
+            <center>
+                <h5>Prestamos</h5>
+            </center>
+
+            <v-container>
+
+                <v-data-table :headers="headers" :no-data-text="'No hay equipos para devolver'" :items="DetallesPrestamos" class="tbl">
+
+                    <template v-slot:item.codigo="{ item }">
+                        {{ item.codigo }}
+                    </template>
+
+                    <template v-slot:item.fechaInicio="{ item }">
+                        {{ formatearFechas(item.fechaInicio) }}
+                    </template>
+
+                    <template v-slot:item.fechaFin="{ item }">
+                        {{ formatearFechas(item.fechaFin) }}
+                    </template>
+
+                    <template v-slot:item.tipoEquipo="{ item }">
+                        {{ item.tipoEquipo }}
+                    </template>
+
+                    <template v-slot:item.serial="{ item }">
+                        {{ item.serial }}
+                    </template>
+
+                    <template v-slot:item.accion="{ item }">
+                        <v-icon small class="mr-2" v-on="on" v-bind="attrs"
+                            @click="MostrarDialogoObservacion(item)">reviews</v-icon>
+                    </template>
+
+                </v-data-table>
+
+            </v-container>
+
+            <br>
+        </v-card>
+
 
     </div>
 </template>
@@ -174,49 +171,45 @@ export default {
         async buscar() {
             if (this.cedulaSeleccionada) {
                 try {
-
                     const response = await axios.get('http://localhost:62000/prestamos/obtener_prestamo/' + this.cedulaSeleccionada);
                     this.prestamos = response.data;
-                    if (this.prestamos.length === 0) {
 
+                    if (this.prestamos.length === 0) {
                         this.tablaDetalle = false;
                         this.cedulaSeleccionada = null;
                         Swal.fire('La cedula seleccionada no tiene prestamos asignados!', '', 'error');
-
                     } else {
-
                         this.tablaPrestamo = true;
                         this.prestamos.forEach(prestamo => {
                             prestamo.prestamo_detalle.forEach(detalle => {
-                                const detallePrestamo = {
-                                    codigo: detalle.equipo.codigo,
-                                    serial: detalle.equipo.serial,
-                                    fechaInicio: detalle.fecha_prestamo,
-                                    fechaFin: detalle.fecha_devolucion,
-                                    tipoEquipo: detalle.equipo.tipo.tipo,
-                                    estadoEquipo: detalle.equipo.estado.estado,
-                                    IdEstadoEquipo: detalle.equipo.estado.id,
-                                    estadoPrestamo: prestamo.estado_prestamo.Estado,
-                                    idPrestamo: prestamo.id
-                                };
-                                this.DetallesPrestamos.push(detallePrestamo);
+                                const ID_RESERVADO = 1;
+                                if (detalle.equipo.estado.id === ID_RESERVADO) {
+                                    const detallePrestamo = {
+                                        codigo: detalle.equipo.codigo,
+                                        serial: detalle.equipo.serial,
+                                        fechaInicio: detalle.fecha_prestamo,
+                                        fechaFin: detalle.fecha_devolucion,
+                                        tipoEquipo: detalle.equipo.tipo.tipo,
+                                        estadoEquipo: detalle.equipo.estado.estado,
+                                        IdEstadoEquipo: detalle.equipo.estado.id,
+                                        estadoPrestamo: prestamo.estado_prestamo.Estado,
+                                        idPrestamo: prestamo.id
+                                    };
+                                    this.DetallesPrestamos.push(detallePrestamo);
+                                }
                             });
                         });
                         console.log(this.DetallesPrestamos);
                     }
-
                 } catch (error) {
-
-                    console.error('Error al obtener detalles de préstamo:' + error);
+                    console.error('Error al obtener detalles de préstamo:', error);
                     Swal.fire('Error al obtener detalles de préstamo', '' + error, 'error');
-
                 }
-
             } else {
                 Swal.fire('No ha seleccionado una cedula', '', 'error');
             }
-
         },
+
 
         async prestamocedula() {
             await axios.get('http://localhost:62000/usuarios/obtener').then(resp => {
@@ -295,8 +288,10 @@ export default {
                     }
                     await axios.put('http://localhost:62000/prestamos/devolucion', paquete).then(resp => {
                         console.log(resp.data);
+                        Swal.fire('El equipo ha sido devuelto!', '', 'success');
                     }).catch(error => {
                         console.log('Error de peticion' + error);
+                        Swal.fire('Error al devolver el equipo', '' + error, 'error')
                     })
                     this.dialog = false;
                 } catch (error) {

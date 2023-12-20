@@ -51,7 +51,8 @@
                     </template>
 
                     <template v-slot:item.accion="{ item }">
-                        <v-icon small class="mr-2" @click="MostrarDetalles(item)">mdi-text-box-search</v-icon>
+                        <v-icon ref="detalleIcon" small class="mr-2"
+                            @click="MostrarDetalles(item)">mdi-text-box-search</v-icon>
                     </template>
 
                 </v-data-table>
@@ -85,8 +86,8 @@
 
 
                     <template v-slot:item.accion="{ item }">
-                        <v-btn v-if="item.idEstadoPrestamo !== 2" style="width: 30px; height: 30px; font-size: 10px;" color="success"
-                            @click="AbrirActualizar">
+                        <v-btn v-if="item.idEstadoPrestamo !== 2" style="width: 30px; height: 30px; font-size: 10px;"
+                            color="success" @click="AbrirActualizar">
                             Procesar
                         </v-btn>
                     </template>
@@ -166,6 +167,7 @@ export default {
     methods: {
 
         async buscar() {
+            this.DetallesPrestamos = [];
             if (this.cedulaSeleccionada) {
                 try {
                     const response = await axios.get('http://localhost:62000/prestamos/obtener_prestamo/' + this.cedulaSeleccionada);
@@ -196,7 +198,7 @@ export default {
                 } catch (error) {
                     console.error('Error al obtener detalles de préstamo:' + error);
                     Swal.fire('Error al obtener detalles de préstamo' + error, 'error');
-                    
+
                 }
             } else {
                 Swal.fire('No ha seleccionado una cedula', '', 'error');
@@ -228,11 +230,14 @@ export default {
                 await axios.put(`http://localhost:62000/prestamos/actualizar_estado/${idPrestamoActualizar}/${idActualizar}`)
                     .then(() => {
                         Swal.fire('', '', 'success');
-                        this.dialogActualizar= false;
+                        this.dialogActualizar = false;
+                        this.DetallesPrestamos = [];
+                        this.buscar();
+
                     });
 
             } catch (error) {
-                Swal.fire('No se pudo cambiar el estado' + error +'error');
+                Swal.fire('No se pudo cambiar el estado' + error + 'error');
                 console.error('Error:', error);
                 this.closeAceptar();
             }
@@ -240,11 +245,11 @@ export default {
 
         },
 
-        AbrirActualizar(){
-            this.dialogActualizar= true;
+        AbrirActualizar() {
+            this.dialogActualizar = true;
         },
-        closeAceptar(){
-            this.dialogActualizar= false;
+        closeAceptar() {
+            this.dialogActualizar = false;
         },
 
         MostrarDetalles(item) {
