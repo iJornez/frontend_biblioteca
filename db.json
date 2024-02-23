@@ -1,0 +1,12 @@
+{
+  "Dispositivos": [
+    {
+      "codigo": "4532",
+      "referencia": "345",
+      "serial": "5432",
+      "estado": "Malo",
+      "tipo": "Video Beam",
+      "id": 1
+    }
+  ]
+}
