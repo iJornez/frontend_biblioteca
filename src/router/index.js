@@ -30,7 +30,7 @@ const routes = [{
             component: () =>
                 import('../views/UserView.vue'),
 
-                
+
         },
         {
             name: 'DashboardEstadoUsuario',
@@ -38,7 +38,7 @@ const routes = [{
             component: () =>
                 import('../views/EstadoUser.vue'),
 
-                
+
         },
         {
             name: 'ManagerDispositivo',
@@ -97,10 +97,10 @@ const routes = [{
                 import('../views/prestamo/RegistrarPres.vue'),
         },
         {
-        path: '/devolucion',
-        name: 'devolucion',
-        component: () =>
-            import('../views/devolucion/DevolucionDisp.vue'),
+            path: '/devolucion',
+            name: 'devolucion',
+            component: () =>
+                import('../views/devolucion/DevolucionDisp.vue'),
         },
         {
             path: '/entrega',
@@ -108,7 +108,7 @@ const routes = [{
             component: () =>
                 import('../views/entrega/EntregaDisp.vue'),
         },
-        
+
 
     ],
 

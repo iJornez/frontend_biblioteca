@@ -14,7 +14,7 @@
     "@fortawesome/vue-fontawesome": "^2.0.8",
     "@vee-validate/rules": "^4.11.6",
     "animate-sass": "^0.8.2",
-    "axios": "^0.27.2",
+    "axios": "^1.6.7",
     "bootstrap-vue": "^2.22.0",
     "console": "^0.7.2",
     "core-js": "^3.6.5",
