@@ -123,7 +123,7 @@ export let menu = [
             {
                 title:"Cerrar sesion",
                 icon:"fas fa-door-open",
-                href:"/dashboard"
+                href:"/"
             }
         ]
     }
