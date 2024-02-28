@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
+import store from '../store'
+import Swal from 'sweetalert2'
 
 
 Vue.use(VueRouter)
@@ -30,7 +31,7 @@ const routes = [{
             component: () =>
                 import('../views/UserView.vue'),
 
-                
+
         },
         {
             name: 'DashboardEstadoUsuario',
@@ -38,7 +39,7 @@ const routes = [{
             component: () =>
                 import('../views/EstadoUser.vue'),
 
-                
+
         },
         {
             name: 'ManagerDispositivo',
@@ -97,10 +98,10 @@ const routes = [{
                 import('../views/prestamo/RegistrarPres.vue'),
         },
         {
-        path: '/devolucion',
-        name: 'devolucion',
-        component: () =>
-            import('../views/devolucion/DevolucionDisp.vue'),
+            path: '/devolucion',
+            name: 'devolucion',
+            component: () =>
+                import('../views/devolucion/DevolucionDisp.vue'),
         },
         {
             path: '/entrega',
@@ -108,9 +109,18 @@ const routes = [{
             component: () =>
                 import('../views/entrega/EntregaDisp.vue'),
         },
-        
+
 
     ],
+    beforeEnter: (to, from, next) => {
+        const usuario = store.getters.usuario;
+        if (!usuario || !usuario.access_token) {
+            Swal.fire('Inicia sesion', '', 'error');
+            next('/');
+        } else{
+            next();
+        }
+    }
 
 
 },
