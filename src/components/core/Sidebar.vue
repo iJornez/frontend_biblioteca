@@ -67,8 +67,8 @@ export default {
       ["mdi-delete", "Trash"],
       ["mdi-alert-octagon", "Spam"],
     ],
-menu:[]
-    
+    menu: []
+
 
   }),
   mounted() {
