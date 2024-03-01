@@ -10,7 +10,11 @@ export default new Vuex.Store({
   },
   mutations: {
     setusuario(state, data) {
-      state.usuario = data
+      state.usuario = data;
+    },
+    limpiarStore(state){
+      state.usuario = null;
+      delete state.usuario
     }
 
 

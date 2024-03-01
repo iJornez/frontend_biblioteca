@@ -39,9 +39,17 @@
           </center>
         </div>
         <br>
+
         <div class="email">
           <center>
             <v-text-field class="c" v-model="paquete.email" :rules="nameRules" label="Email" required>
+            </v-text-field>
+          </center>
+        </div>
+
+        <div class="password">
+          <center>
+            <v-text-field class="c" v-model="paquete.password" :rules="nameRules" label="Password" required>
             </v-text-field>
           </center>
         </div>
@@ -82,6 +90,7 @@ export default {
       apellido: null,
       telefono: null,
       email: null,
+      password: null,
       estadoDelUsuario: 1,
       roles: null
     },
@@ -96,14 +105,8 @@ export default {
   
     enviar() {
       if (this.$refs.form.validate()) {
-        axios.post('http://localhost:62000/usuarios/crear', this.paquete)
+        axios.post('http://localhost:62000/usuarios/register', this.paquete)
           .then((response) => {
-
-            console.log(response);
-            Swal.fire(
-              'Usuario creado exitosamente!','','success'
-            );
-           
 
             console.log(response)
             Swal.fire(
@@ -168,6 +171,14 @@ export default {
 }
 
 .cedula {
+  width: 40%;
+  border: 3px solid rgb(172, 172, 172);
+  border-radius: 4pc;
+  margin-left: 5%;
+  margin-bottom: 30px;
+
+}
+.password {
   width: 40%;
   border: 3px solid rgb(172, 172, 172);
   border-radius: 4pc;

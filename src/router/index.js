@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../store'
-import Swal from 'sweetalert2'
-
 
 Vue.use(VueRouter)
 
@@ -114,13 +112,14 @@ const routes = [{
     ],
     beforeEnter: (to, from, next) => {
         const usuario = store.getters.usuario;
-        if (!usuario || !usuario.access_token) {
-            Swal.fire('Inicia sesion', '', 'error');
+        if (to.path !== '/' && (!usuario || !usuario.access_token)) {
+            
             next('/');
-        } else{
+        } else {
             next();
         }
     }
+
 
 
 },

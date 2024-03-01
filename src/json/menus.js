@@ -82,11 +82,7 @@ export let menu = [
 
                 ],
             },
-            {
-                title:"Cerrar sesion",
-                icon:"fas fa-door-open",
-                href:"/"
-            }
+           
             
 
 
@@ -108,28 +104,9 @@ export let menu = [
                         href: "/registrar",
                         title: "Prestar dispositivo",
                     },
-                    {
-                        href: "/charts/sublink",
-                        title: "Cancelar prestamo",
-                    },
-                    {
-                        href: "/entrega",
-                        title: "Entrega de dispositivo",
-                    },
-                    {
-                        href: "/devolucion",
-                        title: "Devolucion de dispositivos",
-                    },
-
-
                 ],
                 
             },
-            {
-                title:"Cerrar sesion",
-                icon:"fas fa-door-open",
-                href:"/"
-            }
         ]
     }
 
