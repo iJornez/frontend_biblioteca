@@ -83,6 +83,7 @@ const routes = [{
                 },
             ]
         },
+        
         {
             name: 'DashboardWelcome',
             path: '/dashboard/listado',
@@ -94,6 +95,18 @@ const routes = [{
             name: 'Registrar',
             component: () =>
                 import('../views/prestamo/RegistrarPres.vue'),
+        },
+        {
+            path: '/historial',
+            name: 'Historial',
+            component: () =>
+                import('../views/prestamo/HistorialPres.vue'),
+        },
+        {
+            path: '/cancelar',
+            name: 'Cancelar',
+            component: () =>
+                import('../views/prestamo/CancelarPres.vue'),
         },
         {
             path: '/devolucion',
@@ -113,7 +126,6 @@ const routes = [{
     beforeEnter: (to, from, next) => {
         const usuario = store.getters.usuario;
         if (to.path !== '/' && (!usuario || !usuario.access_token)) {
-            
             next('/');
         } else {
             next();

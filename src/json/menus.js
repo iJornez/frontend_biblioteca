@@ -104,9 +104,21 @@ export let menu = [
                         href: "/registrar",
                         title: "Prestar dispositivo",
                     },
+                    {
+                        href:"/historial",
+                        title:"Historial de Prestamos"
+                    },
+                    {
+                        href:"/cancelar",
+                        title:"Cancelar Prestamo"
+                    }
                 ],
                 
+                
             },
+           
+              
+           
         ]
     }
 

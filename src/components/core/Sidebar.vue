@@ -93,7 +93,7 @@ export default {
 </script>
 <style scoped>
 .letra {
-  color: #ffffff;
+  color: black;
   font-size: 20px;
   font-family: "Mystery Quest";
   font-weight: 400;
@@ -101,7 +101,7 @@ export default {
 
 .fon {
   /* background-image:url("../../assets/images/sidebar/abstract4.jpg");*/
-  background-image: url("../../assets/fondo_is.png");
+  background-image: url("../../assets/fondo.jpg");
   background-size: 100% 100%;
   background-attachment: fixed;
   width: 100%;

@@ -10,7 +10,7 @@
                 </button>
             </div>
         </div>
-        <div class="app-sidebar-content">
+        <div class="app-sidebar-content" >
             <VuePerfectScrollbar class="app-sidebar-scroll" v-once>
                 <sidebar-menu showOneChild :menu="menu"/>
             </VuePerfectScrollbar>

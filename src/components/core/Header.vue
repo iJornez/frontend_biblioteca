@@ -1,37 +1,32 @@
 <template>
-  <v-app-bar app elevate-on-scroll elevation="8" relative style="background: #640707;  
-background: -webkit-linear-gradient(to right,#8F0101 , #0059A6);  
-background: linear-gradient(to right, #8F0101, #0059A6);  
-" height="120px">
+  <v-app-bar app elevate-on-scroll elevation="8" class="barra" height="160px">
 
     <v-app-bar-nav-icon class="btn" dark @click="procesa()"></v-app-bar-nav-icon>
 
     <v-toolbar-title class="letra">
       <center>
-        <H1>BIBLIOTECA PRESTACIONAL DEL SENA</h1>
+        <H1>Bienvenido {{ DatosUsuario.nombre}}</h1>
       </center>
     </v-toolbar-title>
 
     <!-- Boton del cerrar sesion y del perfil -->
-    <v-row justify="center">
-      <v-menu bottom min-width="200px" rounded offset-y>
+    <div   style="position:absolute; margin-left:85%;"  >
+      <v-menu rounded  >
         <template v-slot:activator="{ on }">
-          <v-btn icon x-large v-on="on">
-            <v-avatar color="brown" size="48">
+          <v-btn icon  v-on="on">
+            <v-avatar style="margin-left: 100%;" color="brown" size="48">
               <img src="../../assets/PerfilUsuario.png" alt="">
             </v-avatar>
           </v-btn>
         </template>
         <v-card>
-          <v-list-item-content class="justify-center">
-            <div class="mx-auto text-center">
-              <v-avatar color="brown">
+          <v-list-item-content >
+            <div class="mx-auto text-center" >
+              <v-avatar color="brown" >
                 <img src="../../assets/PerfilUsuario.png" alt="">
               </v-avatar>
               <h3>{{ DatosUsuario.nombre }}</h3>
-              <!--<p class="text-caption mt-1">
-                {{ user.email }}
-              </p> -->
+              
               <v-divider class="my-3"></v-divider>
               <v-btn @click="PerfilUsuario" depressed rounded text>
                 Mi Perfil
@@ -44,7 +39,7 @@ background: linear-gradient(to right, #8F0101, #0059A6);
           </v-list-item-content>
         </v-card>
       </v-menu>
-    </v-row>
+    </div>
 
 
 
@@ -97,11 +92,14 @@ export default {
 <style lang="scss" scoped>
 .letra {
   color: white;
-  font-family: monospace;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   margin-top: 6px;
-
-
-
+}
+.barra{
+  background-image: url("../../assets/fondoheader.jpg");
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  width: 100%;
 }
 
 template {
