@@ -8,7 +8,7 @@
       <v-divider> </v-divider>
 
       <div class="app-sidebar-content">
-        <sidebar-menu showOneChild :menu="menu" />
+        <sidebar-menu class="custom-sidebar" showOneChild :menu="menu" />
       </div>
     </vuescroll>
   </v-navigation-drawer>
@@ -91,7 +91,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 .letra {
   color: black;
   font-size: 20px;
@@ -106,4 +106,15 @@ export default {
   background-attachment: fixed;
   width: 100%;
 }
+
+.v-sidebar-menu .vsm-title {
+  color: #000 !important;
+}
+.v-sidebar-menu .vsm-dropdown::before {
+  background: #000;
+}
+.v-sidebar-menu .vsm-icon {
+    color: #000;
+}
+
 </style>

@@ -7,15 +7,6 @@
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-row>
-            <v-col cols="12">
-              <v-select v-model="paquete.usuario" :rules="[v => !!v || 'campo requerido']" :items="usuarios"
-                item-value="cedula" item-text="datosCombinados" label="Usuario" required></v-select>
-              <template #item="{ item }">
-                <div>
-                  <span>{{ item.nombre }} - {{ item.cedula }}</span>
-                </div>
-              </template>
-            </v-col>
 
             <v-col cols="6">
               <v-select v-model="paquete.tipo" :rules="[v => !!v || 'campo requerido']" :items="tipoEquipo"
@@ -42,7 +33,7 @@
                   <v-btn text color="primary" @click="false">
                     Cancel
                   </v-btn>
-                  <v-btn text color="primary" @click="$refs.menu.save(date)">
+                  <v-btn text color="primary" @click="GuardarFechaInicioSeleccionada">
                     Ok
                   </v-btn>
                 </v-date-picker>
@@ -62,7 +53,7 @@
                   <v-btn text color="primary" @click="false">
                     Cancel
                   </v-btn>
-                  <v-btn text color="primary" @click="$refs.menu1.save(date)">
+                  <v-btn text color="primary" @click="GuardarFechaFinalSeleccionada">
                     OK
                   </v-btn>
                 </v-date-picker>
@@ -198,10 +189,6 @@
       </div>
     </center>
 
-
-
-
-
   </div>
 </template>
   
@@ -209,6 +196,7 @@
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
+
 export default {
   data: () => ({
     datosPreGuardados: [],
@@ -226,7 +214,7 @@ export default {
     paquete: {
       tipo: null,
       cantidad: null,
-      usuario: null,
+      usuario: "",
       fechainicio: null,
       fechafinal: null,
       horaInicio: null,
@@ -258,6 +246,18 @@ export default {
       this.dialog = true;
       const fechaInicioCompleta = new Date(`${this.datosPreGuardados[0].fechainicio} ${this.datosPreGuardados[0].horaInicio}`);
       const fechaFinalCompleta = new Date(`${this.datosPreGuardados[0].fechafinal} ${this.datosPreGuardados[0].horaFinal}`);
+      const horaActual = new Date();
+      horaActual.setMinutes(horaActual.getMinutes() + 5);
+      if (fechaInicioCompleta.toDateString() === horaActual.toDateString()) {
+        if (fechaInicioCompleta < horaActual) {
+          this.paquete.horaInicio = horaActual.getHours() + ':' + horaActual.getMinutes();
+        }
+
+        if (fechaFinalCompleta < fechaInicioCompleta) {
+          horaActual.setMinutes(horaActual.getMinutes() + 1);
+          this.paquete.horaFinal = horaActual.getHours() + ':' + horaActual.getMinutes();
+        }
+      }
       const cedulaUsuario = this.datosPreGuardados[0].usuario;
       const paquetePrestamo = {
         fecha_prestamo: fechaInicioCompleta,
@@ -424,7 +424,54 @@ export default {
         this.usuarios = resp.data;
       });
     },
+    validarFechaInicio() {
+      const fechaActual = new Date();
+      const fechaInicio = new Date(this.paquete.fechainicio);
+
+      if (fechaInicio < fechaActual) {
+        fechaActual.setDate(fechaActual.getDate() - 1);
+        this.paquete.fechainicio = fechaActual.toISOString().substr(0, 10);
+      }
+
+      this.menu = false;
+    },
+
+
+    GuardarFechaInicioSeleccionada() {
+      this.validarFechaInicio();
+      this.$refs.menu.save(this.paquete.fechainicio);
+      this.menu = false;
+
+    },
+    validarFechaFinal() {
+      const fechaInicio = new Date(this.paquete.fechainicio);
+      const fechaFin = new Date(this.paquete.fechafinal);
+
+      if (fechaFin < fechaInicio) {
+        fechaInicio.setDate(fechaInicio.getDate() + 1);
+        this.paquete.fechafinal = fechaInicio.toISOString().substr(0, 10);
+        return false;
+      } else {
+        return true;
+      }
+    },
+
+    GuardarFechaFinalSeleccionada() {
+      if (!this.validarFechaFinal()) {
+        this.$refs.menu1.save(this.paquete.fechafinal);
+        this.menu1 = false;
+      } else {
+
+        this.$refs.menu1.save(this.paquete.fechafinal);
+        this.menu1 = false;
+      }
+    },
   },
+
+
+
+
+
   computed: {
     NombreYCedula() {
       return this.usuarios.map(user => ({
@@ -452,6 +499,9 @@ export default {
   },
 
   mounted() {
+    const fechaActual = new Date();
+    this.paquete.fechainicio = `${fechaActual.getFullYear()}-${String(fechaActual.getMonth() + 1).padStart(2, '0')}-${String(fechaActual.getDate()).padStart(2, '0')}`;
+
     this.listarEstados();
     this.listarTipo();
     this.cargarDatosGuardados();
@@ -462,16 +512,10 @@ export default {
     }
   },
 
-  cancelDateSelection() {
-    this.menu = false;
-  },
 
 
-  saveDateSelection() {
-    this.$refs.menu.save(this.date);
-    this.menu = false;
 
-  },
+
 }
 
 </script>

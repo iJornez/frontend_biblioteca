@@ -132,6 +132,7 @@ export default {
       this.paquete.apellido= null,
       this.paquete.telefono= null,
       this.paquete.email= null,
+      this.paquete.password = null,
       this.paquete.estadoDelUsuario= null,
       this.paquete.roles=null;
     },

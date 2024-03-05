@@ -61,16 +61,6 @@ export let menu = [
                 icon: "	fa fa-cogs",
                 child: [
                     {
-                        href: "/registrar",
-                        title: "Prestar dispositivo",
-
-
-                    },
-                    {
-                        href: "/charts/sublink",
-                        title: "Cancelar prestamo",
-                    },
-                    {
                         href: "/entrega",
                         title: "Entrega de dispositivo",
                     },
