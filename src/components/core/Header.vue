@@ -1,7 +1,7 @@
 <template>
   <v-app-bar app elevate-on-scroll elevation="8" class="barra" height="160px">
 
-    <v-app-bar-nav-icon class="btn" dark @click="procesa()"></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon style="margin-left: 20px;" class="btn btn-dark" dark @click="procesa()"></v-app-bar-nav-icon>
 
     <v-toolbar-title class="letra">
       <center>
@@ -10,11 +10,11 @@
     </v-toolbar-title>
 
     <!-- Boton del cerrar sesion y del perfil -->
-    <div   style="position:absolute; margin-left:85%;"  >
+    <div   style="position:absolute; margin-left:75%;"  >
       <v-menu rounded  >
         <template v-slot:activator="{ on }">
           <v-btn icon  v-on="on">
-            <v-avatar style="margin-left: 100%;" color="brown" size="48">
+            <v-avatar style="margin-left: 100%;" color="brown" size="70">
               <img src="../../assets/PerfilUsuario.png" alt="">
             </v-avatar>
           </v-btn>
@@ -91,7 +91,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .letra {
-  color: white;
+  color: rgb(0, 0, 0);
   font-family: Georgia, 'Times New Roman', Times, serif;
   margin-top: 6px;
 }

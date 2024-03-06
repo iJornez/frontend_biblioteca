@@ -1,87 +1,54 @@
 <template>
-  <v-card class="mx-auto" max-width="890" elevation="15">
-    <v-img
-      src="https://img.freepik.com/vector-premium/conexion-humana-red-social-fondo-concepto-tecnologia-comunicacion-digital_618588-965.jpg"
-      height="350px"></v-img>
-
-    <v-card-title class="crear"> Crear Usuario </v-card-title>
-    <br>
-    <hr>
-
-
-    <v-card-text>
-      <v-form ref="form" v-model="valid" lazy-validation>
-        <div class="nombre">
-          <center>
-            <v-text-field class="c" v-model="paquete.nombre" :rules="nameRules" label="Nombre" required>
-            </v-text-field>
-          </center>
-        </div>
-        <br>
-        <div class="apellido">
-          <center>
-            <v-text-field class="c" v-model="paquete.apellido" :rules="nameRules" label="Apellido" required>
-            </v-text-field>
-          </center>
-        </div>
-        <br>
-        <div class="cedula">
-          <center><v-text-field class="c" v-model="paquete.cedula" :counter="10" :rules="nameRules" label="Cedula"
-              required>
-            </v-text-field>
-          </center>
-
-        </div>
-        <div class="telefono">
-          <center>
-            <v-text-field class="c" v-model="paquete.telefono" :rules="nameRules" label="Telefono" required>
-            </v-text-field>
-          </center>
-        </div>
-        <br>
-
-        <div class="email">
-          <center>
-            <v-text-field class="c" v-model="paquete.email" :rules="nameRules" label="Email" required>
-            </v-text-field>
-          </center>
-        </div>
-
-        <div class="password">
-          <center>
-            <v-text-field class="c" v-model="paquete.password" :rules="nameRules" label="Password" required>
-            </v-text-field>
-          </center>
-        </div>
-
-        <div class="ron">
-          <center>
-            <v-select class="c" v-model="paquete.roles" :items="items" item-text="descripcion" item-value="id"
-              :rules="[(v) => !!v || 'Campo requerido']" label="Rol" required>
-            </v-select>
-          </center>
-        </div>
-
-
-
-        <center>
-          <v-btn color="primary" class="mr-4" @click="enviar()"> Guardar </v-btn>
-
-          <v-btn color="error" @click="resetValidation"> Cancelar </v-btn>
-        </center>
-
-
-      </v-form>
-      <br>
-      <br>
-    </v-card-text>
-  </v-card>
+  <v-container fluid>
+    <v-row justify="center">
+      <v-col cols="12" sm="10" md="4">
+        <v-card class="elevation-10">
+          <v-card-title class="text-h5 grey--text text--darken-1">Crear Usuario</v-card-title>
+          <v-divider></v-divider>
+          <v-card-text>
+            <v-form ref="form" v-model="valid" lazy-validation>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="6">
+                    <v-text-field v-model="paquete.nombre" label="Nombre" outlined required></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6">
+                    <v-text-field v-model="paquete.apellido" label="Apellido" outlined required></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field v-model="paquete.cedula" label="Cédula" outlined required></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field v-model="paquete.telefono" label="Teléfono" outlined required></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field v-model="paquete.email" label="Email" outlined required></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field v-model="paquete.password" label="Contraseña" type="password" outlined required></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-select v-model="paquete.roles" :items="items" item-text="descripcion" item-value="id" label="Rol" outlined required></v-select>
+                  </v-col>
+                </v-row>
+              </v-container>
+              <v-row  justify="center">
+                <v-btn color="green" @click="enviar()">Guardar</v-btn>
+                <span style="margin-left: 10px;"></span>
+                <v-btn color="gray" @click="resetValidation">Cancelar</v-btn>
+              </v-row>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
-
 
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
+
 export default {
   data: () => ({
     paquete: {
@@ -91,150 +58,98 @@ export default {
       telefono: null,
       email: null,
       password: null,
-      estadoDelUsuario: 1,
       roles: null
     },
     valid: true,
-    nameRules: [(v) => !!v || "Campo requerido"],
-    items: ["Instructor", "Administrador"],
-    checkbox: false,
-
+    items: []
   }),
 
   methods: {
-  
-    enviar() {
+    async enviar() {
       if (this.$refs.form.validate()) {
-        axios.post('http://localhost:62000/usuarios/register', this.paquete)
-          .then((response) => {
-
-            console.log(response)
-            Swal.fire(
-              'Usuario creado exitosamente!',
-              '',
-              'success'
-            ),
-            this.limpiarDatos();
-            this.$refs.form.resetValidation();
-
-          })
-          
-          .catch((error) => {
-            console.log(error);
-          })
-          .finally(function () {
-          });
+        try {
+          const response = await axios.post('http://localhost:62000/usuarios/register', this.paquete);
+          console.log(response);
+          Swal.fire('Usuario creado exitosamente!', '', 'success');
+          this.limpiarDatos();
+          this.$refs.form.resetValidation();
+        } catch (error) {
+          console.error(error);
+        }
       }
     },
-    async limpiarDatos(){
-      this.paquete.cedula= null,
-      this.paquete.nombre= null,
-      this.paquete.apellido= null,
-      this.paquete.telefono= null,
-      this.paquete.email= null,
-      this.paquete.password = null,
-      this.paquete.estadoDelUsuario= null,
-      this.paquete.roles=null;
+    resetValidation() {
+      this.$refs.form.resetValidation();
     },
-
-  },
-  
-  async mounted() {
-
-    axios.get('http://localhost:62000/roles/obtener').then(response => {
-      console.log(response.data);
-      if (response.data.length > 0) {
-        console.log(response.data)
+    limpiarDatos() {
+      this.paquete = {
+        cedula: null,
+        nombre: null,
+        apellido: null,
+        telefono: null,
+        email: null,
+        password: null,
+        roles: null
+      };
+    },
+    async obtenerRoles() {
+      try {
+        const response = await axios.get('http://localhost:62000/roles/obtener');
+        console.log(response.data);
         this.items = response.data;
-        console.log('aqui', this.items)
+      } catch (error) {
+        console.error(error);
       }
-    });
-
+    }
   },
 
-
-
+  mounted() {
+    this.obtenerRoles();
+  }
 };
 </script>
 
-
 <style scoped>
 .mx-auto {
-  margin-top: 10%;
+  margin-top: 50px; /* Centra el formulario verticalmente */
 }
 
-.crear {
-  font-family: Righteous;
-  font-size: 40px;
-
-  margin-left: 300px;
-
+.card-title {
+  font-family: 'Arial', sans-serif;
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px; /* Espacio entre el título y el resto del contenido */
 }
 
-.cedula {
-  width: 40%;
-  border: 3px solid rgb(172, 172, 172);
-  border-radius: 4pc;
-  margin-left: 5%;
-  margin-bottom: 30px;
-
-}
-.password {
-  width: 40%;
-  border: 3px solid rgb(172, 172, 172);
-  border-radius: 4pc;
-  margin-left: 5%;
-  margin-bottom: 30px;
-
+.card {
+  max-width: 600px; /* Ancho máximo del formulario */
+  margin: 0 auto; /* Centra el formulario horizontalmente */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
 }
 
-.nombre {
-  width: 40%;
-  border: 3px solid rgb(172, 172, 172);
-  border-radius: 4pc;
-  margin-left: 5%;
-
-
+.form-field {
+  margin-bottom: 20px;
 }
 
-.apellido {
-  width: 40%;
-  border: 3px solid rgb(172, 172, 172);
-  border-radius: 4pc;
-  position: absolute;
-  left: 470px;
-  bottom: 393px;
-
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-.telefono {
-  width: 40%;
-  border: 3px solid rgb(172, 172, 172);
-  border-radius: 4pc;
-  position: absolute;
-  left: 470px;
-  bottom: 277px;
+.input-field:focus {
+  outline: none;
+  border-color: #6c63ff; /* Cambia el color del borde al enfocar */
 }
 
-.email {
-  width: 40%;
-  border: 3px solid rgb(172, 172, 172);
-  border-radius: 4pc;
-  margin-left: 5%;
-  margin-bottom: 50px;
+.btn-container {
+  display: flex;
+  justify-content: center;
 }
 
-.ron {
-  width: 40%;
-  border: 3px solid rgb(172, 172, 172);
-  border-radius: 4pc;
-  position: absolute;
-  left: 470px;
-  bottom: 147px;
-}
-
-.c {
-  width: 50%;
-
-}
 </style>
+

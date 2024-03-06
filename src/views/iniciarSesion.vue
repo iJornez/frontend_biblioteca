@@ -3,12 +3,12 @@
     <div class="fondo">
       <v-row>
 
-        <vs-navbar class="cap1" shadow square center-collapsed v-model="active" style="background-color:#640707">
-          <img class="logo" src="../assets/logo.png">
-          <img class="letras" src="../assets/letras.png">
+        <vs-navbar class="cap1" shadow square center-collapsed v-model="active">
+          <img class="logo" src="../assets/LogoSENA.png">
+          <img class="letras" src="../assets/B.png">
 
           <template #right>
-            <vs-button class="iniciopre " style="background-color:#fff;color:#640707; font-size:16px;font-weight: bold;"
+            <vs-button class="iniciopre " style="background-color:#fff;color:#003C24; font-size:16px;font-weight: bold;"
               @click="dialog = true">Iniciar Sesión</vs-button>
 
           </template>
@@ -17,12 +17,12 @@
 
 
         <v-dialog v-model="dialog" max-width="350" height="400">
-          <div class="container h-60">
+          <div class="container h-60 " style="background-color: #737373;">
             <div class="d-flex justify-content-center h-50">
               <div class="user_card">
                 <div class="d-flex justify-content-center">
                   <div class="brand_logo_container">
-                    <img src="../assets/logo.png" class="brand_logo" alt="Logo">
+                    <img src="../assets/LogoSENA.png" class="brand_logo" alt="Logo">
                   </div>
                 </div>
                 <div class="d-flex justify-content-center form_container">
@@ -171,7 +171,8 @@
 
             <div>
               Las computadoras públicas de la biblioteca permiten a los usuarios buscar una gran variedad de recursos
-              electrónicos. Las computadoras con recursos de la biblioteca son exclusivamente para buscar las existencias
+              electrónicos. Las computadoras con recursos de la biblioteca son exclusivamente para buscar las
+              existencias
               de la biblioteca y las bases de datos electrónicas seleccionadas. </div>
           </v-card-text>
 
@@ -186,7 +187,37 @@
           </v-card-actions>
         </v-card>
 
+        <v-card class="mx-auto carta2" max-width="500">
+          <v-img class="white--text align-end" height="400px" width="500px"
+            src="https://images.pexels.com/photos/6803551/pexels-photo-6803551.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2">
+            <v-card-title>Prestamo de computadores</v-card-title>
+          </v-img>
 
+          <v-card-subtitle class="pb-0">
+            ¿Cómo se utilizan las computadoras en la biblioteca?
+          </v-card-subtitle>
+
+          <v-card-text class="text--primary">
+            <div :class="{ 'truncate-text': !showFullText, 'full-text': showFullText }">
+              Las computadoras públicas de la biblioteca permiten a los usuarios buscar una gran variedad de recursos
+              electrónicos. Las computadoras con recursos de la biblioteca son exclusivamente para buscar las
+              existencias
+              de la biblioteca y las bases de datos electrónicas seleccionadas.
+              Las computadoras públicas de la biblioteca permiten a los usuarios buscar una gran variedad de recursos
+              electrónicos. Las computadoras con recursos de la biblioteca son exclusivamente para buscar las
+              existencias
+              de la biblioteca y las bases de datos electrónicas seleccionadas.
+            </div>
+            <span v-if="!showFullText" class="leer-mas" @click="toggleFullText">Leer más</span>
+          </v-card-text>
+
+          <v-card-text class="text--primary">
+
+
+
+          </v-card-text>
+
+        </v-card>
 
         <v-card class="mx-auto carta3" max-width="600">
           <v-img class="white--text align-end" height="400px" width="500px"
@@ -248,7 +279,8 @@
                 </h6>
                 <p class=" color">
                   Una biblioteca prestacional se encarga de proporcionar acceso a una amplia variedad de recursos y
-                  materiales para el préstamo a sus usuarios. Su objetivo principal es ofrecer servicios que promuevan el
+                  materiales para el préstamo a sus usuarios. Su objetivo principal es ofrecer servicios que promuevan
+                  el
                   acceso equitativo a la información, el conocimiento y la cultura.
                 </p>
               </div>
@@ -329,6 +361,7 @@
 
   </div>
 </template>
+
 <script>
 
 import axios from 'axios';
@@ -413,16 +446,22 @@ export default {
     paqueteLogin: {
       cedula: null,
       password: null
-    }
+    },
+    showFullText: false,
+
   }),
 
 
 
   methods: {
 
+    toggleFullText() {
+      // Método para cambiar el estado de showFullText
+      this.showFullText = !this.showFullText;
+    },
     login() {
       var vm = this;
-      console.log('Paquete a enviar',this.paqueteLogin);
+      console.log('Paquete a enviar', this.paqueteLogin);
       axios.post('http://localhost:62000/auth/login', vm.paqueteLogin).then(response => {
         if (response.data == "") {
           console.log('Esta vacio!');
@@ -445,15 +484,16 @@ export default {
       console.log('sd');
       this.$router.push('crear_usuario');
     },
-    
+
   },
   async mounted() {
-    
+
   },
 
 
 }
 </script>
+
 <style scoped>
 .iniciopre {
   top: 30px;
@@ -462,23 +502,25 @@ export default {
 
 .logo {
   position: absolute;
-  top: 5px;
-  left: 45px;
-  width: 110px;
-  height: 110px;
+  top: 7px;
+  left: 35px;
+  width: 145px;
+  height: 105px;
 }
 
 .letras {
   position: absolute;
-  top: -25px;
-  left: 150px;
-  width: 250px;
-  height: 250px;
+  top: -15px;
+  left: 175px;
+  width: 215px;
+  height: 225px;
+  color: black;
 }
 
 .cap1 {
 
   height: 120px;
+  background-image: url("../assets/fondoheader.jpg");
 }
 
 .carusel {
@@ -494,7 +536,7 @@ export default {
   width: 350px;
   margin-top: auto;
   margin-bottom: auto;
-  background-image: url("../assets/fondo_is.png");
+  background-image: url("../assets/fondoheader.jpg");
   position: relative;
   display: flex;
   justify-content: center;
@@ -519,8 +561,12 @@ export default {
 
 .brand_logo {
 
-  height: 130px;
-  width: 130px;
+  position: absolute;
+  top: 7px;
+  left: 15px;
+  width: 145px;
+  height: 105px;
+
 
 
 }
@@ -532,7 +578,7 @@ export default {
 .login_btn {
   width: 100%;
   background: #eef0f0 !important;
-  color: #640707 !important;
+  color: #003C24 !important;
   font-weight: 700;
   top: 50px;
 }
@@ -603,4 +649,27 @@ footer {
 
   color: #ffff;
 }
+.v-card {
+  height: 600px; /* Ajusta según sea necesario */
+  overflow: hidden;
+}
+
+.truncate-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Ajusta según sea necesario */
+  -webkit-box-orient: vertical;
+}
+
+.full-text {
+  overflow: visible;
+  display: block;
+}
+
+.leer-mas {
+  cursor: pointer;
+  color: blue;
+}
+
 </style>

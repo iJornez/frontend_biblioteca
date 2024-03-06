@@ -1,9 +1,9 @@
 <template>
   <v-navigation-drawer v-model="drawer" app class="fon" width="320px">
     <vuescroll :ops="ops">
-      <v-img contain height="120px" src="../../assets/logo.png"> </v-img>
+      <v-img contain height="120px" style="top: 15px;" src="../../assets/LogoSENA.png"> </v-img>
       <div style="text-align: center">
-        <label class="letra" for="">AULAS INTELIGENTES</label>
+        <label class="letra" for="">Biblioteca Sena</label>
       </div>
       <v-divider> </v-divider>
 
@@ -97,6 +97,7 @@ export default {
   font-size: 20px;
   font-family: "Mystery Quest";
   font-weight: 400;
+  margin-top: 20px;
 }
 
 .fon {
