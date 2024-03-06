@@ -44,6 +44,7 @@
             <v-col cols="6">
               <v-menu ref="menu1" v-model="menu1" :close-on-content-click="false" :return-value.sync="date"
                 transition="scale-transition" offset-y min-width="auto">
+
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field v-model="paquete.fechafinal" label="fecha final" prepend-icon="mdi-calendar" readonly
                     v-bind="attrs" v-on="on"></v-text-field>
@@ -68,6 +69,7 @@
             <v-col cols="6">
               <v-menu ref="menu3" v-model="menu3" :close-on-content-click="false" transition="scale-transition" offset-y
                 min-width="auto">
+
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field v-model="paquete.horaInicio" label="Hora Inicio" prepend-icon="mdi-clock" readonly
                     v-bind="attrs" v-on="on" format="HH:mm"></v-text-field>
@@ -80,6 +82,7 @@
             <v-col cols="6">
               <v-menu ref="menu4" v-model="menu4" :close-on-content-click="false" transition="scale-transition" offset-y
                 min-width="auto">
+
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field v-model="paquete.horaFinal" label="Hora Final" prepend-icon="mdi-clock" readonly
                     v-bind="attrs" v-on="on" format="HH:mm"></v-text-field>
@@ -181,21 +184,24 @@
 
     <center>
       <div class="botones ">
-        <v-btn class="registrar" v-if="MostrarTabla" :disabled="dialog" :loading="dialog" color="primary" @click="enviar">
+        <v-btn class="registrar" v-if="MostrarTabla" :disabled="dialog" :loading="dialog" color="primary"
+          @click="enviar">
           Registrar
         </v-btn>
 
-        <v-btn class="cancelar" v-if="MostrarTabla" color="error" @click="resetValidation"> Cancelar </v-btn>
+        <v-btn class="cancelar" v-if="MostrarTabla" color="error" @click="resetValidation()"> Cancelar </v-btn>
       </div>
     </center>
 
   </div>
 </template>
-  
-  
+
+
 <script>
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
+
 
 export default {
   data: () => ({
@@ -211,15 +217,20 @@ export default {
       { text: 'Fecha final', value: 'fechafinal' },
       { text: 'Actions', value: 'actions', sortable: false },
     ],
+    datosUsuario: {
+      cedula: '',
+      nombre: ''
+    },
     paquete: {
       tipo: null,
       cantidad: null,
-      usuario: "",
+      usuario: '',
       fechainicio: null,
       fechafinal: null,
       horaInicio: null,
       horaFinal: null,
     },
+
 
 
     valid: true,
@@ -390,15 +401,15 @@ export default {
     },
 
     async VaciarStorage(idDelItemAEliminar) {
-      localStorage.clear();
       this.datosPreGuardados = this.datosPreGuardados.filter(item => item.id !== idDelItemAEliminar);
       localStorage.setItem('datosPreGuardados', JSON.stringify(this.datosPreGuardados));
-      this.MostrarTabla = false;
+      this.MostrarTabla = this.datosPreGuardados.length > 0;
       this.limpiarDatos();
     },
 
-    async deleteItem() {
-      this.VaciarStorage();
+
+    async deleteItem(idDelItemAEliminar) {
+      this.VaciarStorage(idDelItemAEliminar);
       this.closeDelete();
       this.dialogEliminar = false;
     },
@@ -482,7 +493,6 @@ export default {
   },
   watch: {
     dialog(val) {
-      val || this.close()
       if (!val) return
 
       setTimeout(() => (this.dialog = false), 2500)
@@ -499,9 +509,15 @@ export default {
   },
 
   mounted() {
+    const token = this.$store.getters.usuario.access_token;
+    const tokenDecodified = jwtDecode(token);
+    this.datosUsuario = {
+      cedula: tokenDecodified.cedula,
+      nombre: tokenDecodified.nombre
+    };
+    this.paquete.usuario = this.datosUsuario.cedula;
     const fechaActual = new Date();
     this.paquete.fechainicio = `${fechaActual.getFullYear()}-${String(fechaActual.getMonth() + 1).padStart(2, '0')}-${String(fechaActual.getDate()).padStart(2, '0')}`;
-
     this.listarEstados();
     this.listarTipo();
     this.cargarDatosGuardados();
@@ -519,7 +535,7 @@ export default {
 }
 
 </script>
-  
+
 <style scoped>
 .botones {
 
