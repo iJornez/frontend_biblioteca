@@ -5,7 +5,7 @@
 
       <div class="loan-form">
 
-        <v-card class="mx-auto" max-width="890" elevation="24" style="margin-top: 5px; ;">
+        <v-card class="mx-auto" max-width="890" elevation="24" style="margin-top: 5px;">
 
           <br><br>
 
@@ -17,8 +17,10 @@
 
             Nos enorgullece ofrecer una solución innovadora para aquellos que buscan acceder temporalmente a la última
             tecnología . Ya sea que necesites un portátil para un proyecto urgente, una tablet para tus estudios o
-            cualquier otro dispositivo electrónico, estamos aquí para cubrir tus necesidades. Nuestra plataforma facilita
-            el proceso de préstamo, conectando a prestamistas y prestatarios de manera segura y eficiente. Explora nuestra
+            cualquier otro dispositivo electrónico, estamos aquí para cubrir tus necesidades. Nuestra plataforma
+            facilita
+            el proceso de préstamo, conectando a prestamistas y prestatarios de manera segura y eficiente. Explora
+            nuestra
             amplia gama de dispositivos disponibles y descubre cómo podemos hacer que la tecnología esté al alcance de
             todos. ¡Bienvenido a la revolución del acceso electrónico!</p>
 
@@ -41,8 +43,8 @@
 .contenedor {
 
   width: 100%;
-
   height: 100%;
+
 
 
 
@@ -58,7 +60,7 @@
 
   max-width: 720px;
 
-
+z-index: 4;
 
   margin-top: 10%;
 

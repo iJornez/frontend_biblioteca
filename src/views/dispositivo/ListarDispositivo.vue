@@ -1,6 +1,6 @@
 
 <template>
-  <div>
+  <div style="width:1700px; margin-left:20%; margin-top:200px;">
     <v-toolbar dark prominent elevation="15"
       src="https://img.freepik.com/foto-gratis/fondo-azul-degradado-lujo-abstracto-azul-oscuro-liso-banner-estudio-vineta-negra_1258-54587.jpg">
 

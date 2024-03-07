@@ -1,5 +1,5 @@
 <template >
-  <v-app id="inspire">
+  <v-app  id="inspire">
 
     <div class="app-container">
       <router-view />
@@ -31,6 +31,7 @@ export default {
   color: rgb(255, 255, 255);
 }
 
+
 .v-sidebar-menu .vsm-title {
   color: #FFFFFF;
 }
@@ -38,6 +39,21 @@ export default {
 .v-sidebar-menu .vsm-icon {
   color: #FFFFFF;
 }
+
+.v-main__wrap{
+  background-image: url('../src/assets/textura.png');
+  background-repeat: repeat;
+
+
+
+}
+
+.v-main{
+  padding: 0px 0px 0px 0px !important;
+  z-index: 1;
+}
+
+
 
 .v-sidebar-menu .vsm-link:hover {
   background-color: #ffffff70;

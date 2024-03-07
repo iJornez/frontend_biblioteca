@@ -1,6 +1,7 @@
 
 <template>
-    <v-card class="mx-auto" max-width="900px" elevation="15">
+    <v-card style="margin-top: 200px;" class="mx-auto" max-width="900px" elevation="15">
+        
         <div width="100px" class="color">
 
             <v-img src="../assets/images/config_usuario.png" height="auto"></v-img>

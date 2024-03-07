@@ -109,13 +109,14 @@ export default {
 }
 
 .v-sidebar-menu .vsm-title {
-  color: #000 !important;
+  color:#000 !important;
+  font-weight: bold;
 }
 .v-sidebar-menu .vsm-dropdown::before {
   background: #000;
 }
 .v-sidebar-menu .vsm-icon {
-    color: #000;
+    color:#1b4202;
 }
 
 </style>

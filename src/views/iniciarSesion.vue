@@ -29,7 +29,7 @@
                   <form v-on:submit.prevent>
                     <div class="input-group mb-3">
                       <div class="input-group-append">
-                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <span class="input-group-text"><i class="fas fa-user" color="black"> </i></span>
                       </div>
                       <input v-model="paqueteLogin.cedula" type="text" name="" class="form-control input_user"
                         placeholder="Username">
@@ -593,7 +593,7 @@ export default {
 }
 
 .input-group-text {
-  background: #0079C4 !important;
+  background: #000 !important;
   color: #FFFFFF !important;
   border: 0 !important;
   border-radius: 0.25rem 0 0 0.25rem !important;
@@ -649,8 +649,10 @@ footer {
 
   color: #ffff;
 }
+
 .v-card {
-  height: 600px; /* Ajusta según sea necesario */
+  height: 600px;
+  /* Ajusta según sea necesario */
   overflow: hidden;
 }
 
@@ -658,7 +660,8 @@ footer {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Ajusta según sea necesario */
+  -webkit-line-clamp: 3;
+  /* Ajusta según sea necesario */
   -webkit-box-orient: vertical;
 }
 
@@ -671,5 +674,4 @@ footer {
   cursor: pointer;
   color: blue;
 }
-
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-bottom: 150px;">
+  <div style="margin-bottom: 150px; margin-top:200px;">
     <v-card elevation="15" class="mx-auto" max-width="900" style="margin-top: 70px;">
 
       <v-card-title> Registrar Prestamo</v-card-title>
@@ -509,6 +509,7 @@ export default {
   },
 
   mounted() {
+    this.MostrarTabla = false;
     const token = this.$store.getters.usuario.access_token;
     const tokenDecodified = jwtDecode(token);
     this.datosUsuario = {

@@ -1,6 +1,7 @@
 <template>
   <v-main>
-    <v-container>
+    
+    <v-container style="margin-top: 200px; margin-left:35%; border-radius:20px; border:4px solid green ; width:1000px; background-color:white">
       <v-select
         v-model="select"
         :items="items"
@@ -9,6 +10,8 @@
         required
       ></v-select>
       <router-view />
+      <br>
+      <br>
     </v-container>
   </v-main>
 </template>

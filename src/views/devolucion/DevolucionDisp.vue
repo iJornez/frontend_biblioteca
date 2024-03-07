@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="margin-top: 200px;">
 
         <v-card class="mx-auto" max-width="890" elevation="15" style="margin-top: 50px;">
             <v-card-title class="crear" style="margin-left: 37%;">

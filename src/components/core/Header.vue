@@ -81,7 +81,8 @@ export default {
     },
     CerrarSesion() {
       this.$store.commit('limpiarStore');
-      this.$router.push('/')
+      this.$router.push('/');
+      window.location.reload();
     },
     PerfilUsuario() {
 

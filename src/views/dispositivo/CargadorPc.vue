@@ -44,11 +44,12 @@
 
         
 
-        
+        <center>
 
         <v-btn color="primary" class="mr-4" @click="enviar()"> Guardar </v-btn>
 
         <v-btn color="error" @click="resetValidation"> Cancelar </v-btn>
+      </center>
       </v-form>
     </v-card-text>
   </v-card>

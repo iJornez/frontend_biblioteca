@@ -1,8 +1,9 @@
 <template>
   <v-container fluid>
-    <v-row justify="center">
+   
+    <v-row style="margin-top:200px; " justify="center">
       <v-col cols="12" sm="10" md="4">
-        <v-card class="elevation-10">
+        <v-card style="border: 5px solid green ; border-radius:20px;" class="elevation-24">
           <v-card-title class="text-h5 grey--text text--darken-1">Crear Usuario</v-card-title>
           <v-divider></v-divider>
           <v-card-text>
@@ -37,6 +38,7 @@
                 <span style="margin-left: 10px;"></span>
                 <v-btn color="gray" @click="resetValidation">Cancelar</v-btn>
               </v-row>
+              <br>
             </v-form>
           </v-card-text>
         </v-card>
