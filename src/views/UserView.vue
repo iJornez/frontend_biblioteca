@@ -59,6 +59,7 @@ export default {
       apellido: null,
       telefono: null,
       email: null,
+      estadoDelUsuario:1,
       password: null,
       roles: null
     },
