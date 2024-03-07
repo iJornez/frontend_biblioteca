@@ -1,4 +1,3 @@
-
 <template>
     <v-card class="mx-auto" max-width="900px" elevation="15">
         <div width="100px" class="color">
@@ -26,6 +25,7 @@
                     mdi-pencil
                 </v-icon>
             </template>
+
             <template v-slot:no-data>
                 <v-btn color="primary" @click="initialize">
                     Reset
@@ -68,13 +68,13 @@
                             </v-col>
 
                             <v-col cols="12" sm="6" md="4">
-                                <v-select v-model="editElement.estadoDelUsuario" :items="estadosEquipo" item-text="estado"
-                                    item-value="id" label="Estado" required dense></v-select>
+                                <v-select v-model="editElement.estadoDelUsuario" :items="estadosEquipo"
+                                    item-text="estado" item-value="id" label="Estado" required dense></v-select>
                             </v-col>
 
                             <v-col cols="12" sm="6" md="4">
-                                <v-select v-model="editElement.roles" :items="Roles" item-text="descripcion" item-value="id"
-                                    label="Roles" required></v-select>
+                                <v-select v-model="editElement.roles" :items="Roles" item-text="descripcion"
+                                    item-value="id" label="Roles" required></v-select>
                             </v-col>
 
                         </v-row>
@@ -84,10 +84,10 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" text @click="dialog = false">
-                        Cancel
+                        Cancelar
                     </v-btn>
                     <v-btn color="blue darken-1" text @click="save()">
-                        Save
+                        Guardar
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -215,8 +215,10 @@ export default {
         },
 
         async save() {
+            const cedula = this.editElement.cedula;
             try {
-                await axios.put('http://localhost:62000/usuarios/actualizar/', this.editElement).then(() => {
+                await axios.put(`http://localhost:62000/usuarios/actualizar/${cedula}`, this.editElement).then(() => {
+            
                     Swal.fire(
                         '',
                         '',
@@ -225,7 +227,14 @@ export default {
 
                     this.dialog = false;
 
-                });
+                }).catch(error => {
+                    console.log(error);
+                    Swal.fire(
+                        '',
+                        '' + error,
+                        'error'
+                    )
+                })
                 await this.listarUsuarios();
 
             }
@@ -269,6 +278,3 @@ export default {
 
 }
 </style>
-
-
-

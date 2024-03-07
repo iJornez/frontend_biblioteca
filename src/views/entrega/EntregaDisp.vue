@@ -39,13 +39,15 @@
                 <h5>Prestamos</h5>
             </center>
             <v-container>
-                <v-data-table :headers="headers" :items="DetallesPrestamos" class="tbl">
+                <v-data-table :headers="headers" :items="prestamos" class="tbl">
                     <template v-slot:item.codigo="{ item }">
-                        {{ item.codigo }}
+                        {{ item.id }}
                     </template>
+
                     <template v-slot:item.fechaInicio="{ item }">
                         {{ formatearFechas(item.fechaInicio) }}
                     </template>
+
                     <template v-slot:item.fechaFin="{ item }">
                         {{ formatearFechas(item.fechaFin) }}
                     </template>
@@ -63,14 +65,14 @@
         </v-card>
         <br>
         <br>
-        <v-card class="mx-auto" max-width="890" v-if="tablaDetalle" elevation="15">
+        <v-card class="mx-auto" max-width="890" v-if="detalles" elevation="15">
             <hr>
             <center>
                 <h5>Detalle Prestamos</h5>
             </center>
             <v-container>
 
-                <v-data-table :headers="headersDetalle" :items="DetalleSeleccionado" class="tbl">
+                <v-data-table :headers="headersDetalle" :items="detallePrestamo" class="tbl">
 
                     <template v-slot:item.tipoEquipo="{ item }">
                         {{ item.tipoEquipo }}
@@ -126,14 +128,14 @@
 
     </div>
 </template>
-      
+
 <script>
 import axios from 'axios';
 import Swal from "sweetalert2";
 export default {
     data: () => ({
         headers: [
-            { text: 'Código', value: 'codigo' },
+            { text: 'IdPrestamo', value: 'id' },
             { text: 'Fecha Inicio', value: 'fechaInicio' },
             { text: 'Fecha Fin', value: 'fechaFin' },
             { text: 'Acción', value: 'accion' },
@@ -172,6 +174,7 @@ export default {
                 try {
                     const response = await axios.get('http://localhost:62000/prestamos/obtener_prestamo/' + this.cedulaSeleccionada);
                     this.prestamos = response.data;
+                    console.log(this.prestamos);
                     if (this.prestamos.length === 0) {
                         this.tablaDetalle = false;
                         this.cedulaSeleccionada = null;
@@ -273,7 +276,7 @@ export default {
     },
 };
 </script>
-      
+
 <style scoped>
 .mx-auto {
     font-family: 'Arial Narrow', Arial, sans-serif
