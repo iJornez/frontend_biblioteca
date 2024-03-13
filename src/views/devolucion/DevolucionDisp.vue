@@ -1,8 +1,8 @@
 <template>
     <div style="margin-top: 200px;">
 
-        <v-card class="mx-auto" max-width="890" elevation="15" style="margin-top: 50px;">
-            <v-card-title class="crear" style="margin-left: 37%;">
+        <v-card class="mx-auto" max-width="890" elevation="15" style="margin-top: 50px;  border: 5px solid green ; border-radius:20px;">
+            <v-card-title class="crear" style="margin-left: 37%; ">
                 <h3> Devolucion de Equipos </h3>
             </v-card-title>
             <hr>
@@ -36,7 +36,7 @@
         <br>
 
         <v-dialog v-model="dialog" max-width="500px">
-            <v-card>
+            <v-card >
 
                 <v-card-title>
                     <span class="text-h5">Devolucion de Equipo</span>
@@ -79,12 +79,12 @@
         <br>
         <br>
 
-        <v-card class="mx-auto" max-width="890" v-if="tablaPrestamo" elevation="15">
-            <hr>
+        <v-card style=" border: 5px solid green ; border-radius:20px;" class="mx-auto" max-width="890" v-if="tablaPrestamo" elevation="15">
+         <br>
             <center>
                 <h5>Prestamos</h5>
             </center>
-
+            <hr>
             <v-container>
 
                 <v-data-table :headers="headers" :no-data-text="'No hay equipos para devolver'" :items="DetallesPrestamos" class="tbl">

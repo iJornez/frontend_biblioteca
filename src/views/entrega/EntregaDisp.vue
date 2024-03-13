@@ -1,6 +1,6 @@
 <template>
     <div style="margin-top: 200px;">
-        <v-card class="mx-auto" max-width="890" elevation="15" style="margin-top: 50px;">
+        <v-card class="mx-auto" max-width="890" elevation="15" style="margin-top: 50px; border: 5px solid green ; border-radius:20px;">
             <v-card-title class="crear" style="margin-left: 37%;">
                 <h3> Entrega Equipos </h3>
             </v-card-title>
@@ -30,10 +30,11 @@
 
 
         </v-card>
+
         <br>
         <br>
 
-        <v-card class="mx-auto" max-width="890" v-if="tablaPrestamo" elevation="15">
+        <v-card style=" border: 5px solid green ; border-radius:20px;" class="mx-auto" max-width="890" v-if="tablaPrestamo" elevation="15">
             <hr>
             <center>
                 <h5>Prestamos</h5>
@@ -63,19 +64,21 @@
             <br>
 
         </v-card>
+
         <br>
         <br>
-        <v-card class="mx-auto" max-width="890" v-if="detalles" elevation="15">
+
+        <v-card class="mx-auto" max-width="890" v-if="detalles" elevation="15" style="border: 5px solid green ; border-radius:20px;">
             <hr>
             <center>
-                <h5>Detalle Prestamos</h5>
+                <h5>Detalle del Prestamo</h5>
             </center>
             <v-container>
 
-                <v-data-table :headers="headersDetalle" :items="detallePrestamo" class="tbl">
+                <v-data-table :headers="headersDetalle" :items="DetalleSeleccionado" class="tbl">
 
                     <template v-slot:item.tipoEquipo="{ item }">
-                        {{ item.tipoEquipo }}
+                        {{ item.tipoEquipo.tipo }}
                     </template>
 
                     <template v-slot:item.serial="{ item }">
@@ -83,7 +86,7 @@
                     </template>
 
                     <template v-slot:item.estadoPrestamo="{ item }">
-                        {{ item.estadoPrestamo }}
+                        {{ item.estadoPrestamo.estado }}
                     </template>
 
 
@@ -148,7 +151,7 @@ export default {
         ],
         data: [],
         tablaPrestamo: false,
-        tablaDetalle: false,
+        detalles: false,
         dialogActualizar: false,
         DetalleSeleccionado: [],
         cedulaSeleccionada: null,
@@ -256,7 +259,7 @@ export default {
         },
 
         MostrarDetalles(item) {
-            this.tablaDetalle = true;
+            this.detalles = true;
             this.DetalleSeleccionado = [item];
             console.log('Aqui', item);
         },
@@ -281,6 +284,7 @@ export default {
 .mx-auto {
     font-family: 'Arial Narrow', Arial, sans-serif
 }
+
 
 .buscar {
     margin-left: 20px;

@@ -31,6 +31,13 @@
           required
         ></v-text-field>
 
+        <v-text-field
+        v-model="paquete.telefonica"
+        :rules="nameRules"
+        label="Serial telefonica"
+        required
+      ></v-text-field>
+
        <v-select
       v-model="paquete.estado"
       :items="items" 
@@ -133,6 +140,7 @@ import  Swal  from "sweetalert2";
         this.paquete.codigo = null;
         this.paquete.descripcion = null;
         this.paquete.serial = null;
+        this.paquete.telefonica = null;
         this.paquete.estado = null;
       }
 
