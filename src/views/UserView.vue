@@ -1,39 +1,51 @@
 <template>
   <v-container fluid>
-   
+
     <v-row style="margin-top:200px; " justify="center">
       <v-col cols="12" sm="10" md="4">
         <v-card style="border: 5px solid green ; border-radius:20px;" class="elevation-24">
-          <v-card-title class="text-h5 grey--text text--darken-1">Crear Usuario</v-card-title>
+          <v-card-title style="justify-content: center;" class="text-h5 grey--text text--darken-1">Crear
+            Usuario</v-card-title>
           <v-divider></v-divider>
           <v-card-text>
             <v-form ref="form" v-model="valid" lazy-validation>
               <v-container>
                 <v-row>
+
                   <v-col cols="12" sm="6">
                     <v-text-field v-model="paquete.nombre" label="Nombre" outlined required></v-text-field>
                   </v-col>
+
                   <v-col cols="12" sm="6">
                     <v-text-field v-model="paquete.apellido" label="Apellido" outlined required></v-text-field>
                   </v-col>
+
                   <v-col cols="12">
                     <v-text-field v-model="paquete.cedula" label="Cédula" outlined required></v-text-field>
                   </v-col>
+
                   <v-col cols="12">
                     <v-text-field v-model="paquete.telefono" label="Teléfono" outlined required></v-text-field>
                   </v-col>
+
                   <v-col cols="12">
                     <v-text-field v-model="paquete.email" label="Email" outlined required></v-text-field>
                   </v-col>
+
                   <v-col cols="12">
-                    <v-text-field v-model="paquete.password" label="Contraseña" type="password" outlined required></v-text-field>
+                    <v-text-field v-model="paquete.password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                      :type="showPassword ? 'text' : 'password'" label="Contraseña" outlined required
+                      @click:append="showPassword = !showPassword"></v-text-field>
                   </v-col>
+                  
                   <v-col cols="12">
-                    <v-select v-model="paquete.roles" :items="items" item-text="descripcion" item-value="id" label="Rol" outlined required></v-select>
+                    <v-select v-model="paquete.roles" :items="items" item-text="descripcion" item-value="id" label="Rol"
+                      outlined required></v-select>
                   </v-col>
+
                 </v-row>
               </v-container>
-              <v-row  justify="center">
+              <v-row justify="center">
                 <v-btn color="green" @click="enviar()">Guardar</v-btn>
                 <span style="margin-left: 10px;"></span>
                 <v-btn color="gray" @click="resetValidation">Cancelar</v-btn>
@@ -59,12 +71,13 @@ export default {
       apellido: null,
       telefono: null,
       email: null,
-      estadoDelUsuario:1,
+      estadoDelUsuario: 1,
       password: null,
       roles: null
     },
     valid: true,
-    items: []
+    items: [],
+    showPassword: false
   }),
 
   methods: {
@@ -83,16 +96,17 @@ export default {
     },
     resetValidation() {
       this.$refs.form.resetValidation();
+      this.limpiarDatos();
     },
     limpiarDatos() {
       this.paquete = {
-        cedula: null,
-        nombre: null,
-        apellido: null,
-        telefono: null,
-        email: null,
-        password: null,
-        roles: null
+        cedula: '',
+        nombre: '',
+        apellido: '',
+        telefono: '',
+        email: '',
+        password: '',
+        roles: ''
       };
     },
     async obtenerRoles() {
@@ -114,7 +128,8 @@ export default {
 
 <style scoped>
 .mx-auto {
-  margin-top: 50px; /* Centra el formulario verticalmente */
+  margin-top: 50px;
+  /* Centra el formulario verticalmente */
 }
 
 .card-title {
@@ -122,15 +137,19 @@ export default {
   font-size: 36px;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 20px; /* Espacio entre el título y el resto del contenido */
+  margin-bottom: 20px;
+  /* Espacio entre el título y el resto del contenido */
 }
 
 .card {
-  max-width: 600px; /* Ancho máximo del formulario */
-  margin: 0 auto; /* Centra el formulario horizontalmente */
+  max-width: 600px;
+  /* Ancho máximo del formulario */
+  margin: 0 auto;
+  /* Centra el formulario horizontalmente */
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  /* Sombra suave */
 }
 
 .form-field {
@@ -146,13 +165,12 @@ export default {
 
 .input-field:focus {
   outline: none;
-  border-color: #6c63ff; /* Cambia el color del borde al enfocar */
+  border-color: #6c63ff;
+  /* Cambia el color del borde al enfocar */
 }
 
 .btn-container {
   display: flex;
   justify-content: center;
 }
-
 </style>
-

@@ -45,11 +45,11 @@
                     </template>
 
                     <template v-slot:item.fechaInicio="{ item }">
-                        {{ formatearFechas(item.fechaInicio) }}
+                        {{ formatearFechas(item.fecha_prestamo) }}
                     </template>
 
                     <template v-slot:item.fechaFin="{ item }">
-                        {{ formatearFechas(item.fechaFin) }}
+                        {{ formatearFechas(item.fecha_devolucion) }}
                     </template>
 
                     <template v-slot:item.accion="{ item }">
@@ -256,8 +256,8 @@ export default {
         },
 
         MostrarDetalles(item) {
-            this.DetalleSeleccionado = [item];
             this.tablaDetalle = true;
+            this.DetalleSeleccionado = [item];
             console.log('Aqui', item);
         },
 

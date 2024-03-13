@@ -20,18 +20,24 @@
 
 
     <v-data-table :headers="headers" :items="prestamos" class="elevation-15">
+
+      <template v-slot:item.fecha_prestamo="{ item }">
+        {{ formatearFechas(item.fecha_prestamo) }}
+      </template>
+
+      <template v-slot:item.fecha_devolucion="{ item }">
+        {{ formatearFechas(item.fecha_devolucion) }}
+      </template>
+
       <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="AbrirDetalles(item)">
-          info
-        </v-icon>
+        <center>
+          <v-icon small class="mr-2" @click="AbrirDetalles(item)">
+            info
+          </v-icon>
+        </center>
       </template>
 
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize">
-          Reset
-        </v-btn>
 
-      </template>
 
     </v-data-table>
 
@@ -39,38 +45,53 @@
     <v-dialog v-model="dialog" max-width="500px">
 
       <v-card>
-        <v-card-title>
-          <span class="text-h5">{{ }}</span>
-        </v-card-title>
-
         <v-card-text>
+
           <v-container>
+
             <v-row>
 
-              <v-col cols="12" sm="6" md="3">
-                <v-text-field label="Solo" outlined disabled></v-text-field>
+              <v-col cols="12">
+                <v-text-field v-model="editElement.codigo" label="Codigo" disabled dense outlined></v-text-field>
               </v-col>
 
-              <v-col cols="12" sm="6" md="3">
-                <v-text-field label="Solo" outlined disabled></v-text-field>
+              <v-col cols="12">
+                <v-text-field v-model="editElement.descripcion" label="Referencia" dense outlined></v-text-field>
               </v-col>
 
-              <v-col cols="12" sm="6" md="3">
-                <v-text-field label="Solo" outlined disabled></v-text-field>
+              <v-col cols="12">
+                <v-text-field v-model="editElement.serial" label="Serial" dense outlined></v-text-field>
+              </v-col>
+
+              <v-col cols="12">
+                <v-select v-model="editElement.estado" :items="estadosEquipo" item-text="estado" item-value="id"
+                  label="Estado" required dense outlined></v-select>
+              </v-col>
+
+              <v-col cols="12">
+                
+                <v-select v-model="editElement.tipo" :items="tipoEquipo" item-text="tipo" item-value="id" label="Tipo"
+                  required dense outlined></v-select>
               </v-col>
 
             </v-row>
-          </v-container>
-        </v-card-text>
 
+          </v-container>
+
+        </v-card-text>
+        
         <v-card-actions>
+
           <v-spacer></v-spacer>
+
           <v-btn color="blue darken-1" text @click="dialog = false">
             Cerrar
           </v-btn>
+
         </v-card-actions>
 
       </v-card>
+
     </v-dialog>
 
 
@@ -87,15 +108,15 @@ export default {
 
     return {
 
-      dialog: false,
+      dialog: true,
       headers: [
         { text: 'Cedula', value: 'usuario.cedula' },
         { text: 'Nombre', value: 'usuario.nombre' },
         { text: 'Apellido', value: 'usuario.apellido' },
-        { text: 'Fecha de Inicio', value: 'prestamo_detalle.fecha_prestamo' },
-        { text: 'Fecha de Fin', value: 'prestamo_detalle.fecha_devolucion' },
+        { text: 'Fecha de Inicio', value: 'fecha_prestamo' },
+        { text: 'Fecha de Fin', value: 'fecha_devolucion' },
         { text: 'Estado', value: 'estado_prestamo.Estado' },
-        { text: 'Actions', value: 'actions', sortable: false },
+        { text: 'Detalle del prestamo', value: 'actions', sortable: false },
       ],
       items: [],
       datos: [],
@@ -150,7 +171,11 @@ export default {
 
     AbrirDetalles() {
       this.dialog = true;
-    }
+    },
+    formatearFechas(date) {
+      const Fechasformateadas = new Date(date).toLocaleString();
+      return Fechasformateadas;
+    },
   },
 
 
