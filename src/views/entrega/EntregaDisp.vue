@@ -1,6 +1,7 @@
 <template>
     <div style="margin-top: 200px;">
-        <v-card class="mx-auto" max-width="890" elevation="15" style="margin-top: 50px; border: 5px solid green ; border-radius:20px;">
+        <v-card class="mx-auto" max-width="890" elevation="15"
+            style="margin-top: 50px; border: 5px solid green ; border-radius:20px;">
             <v-card-title class="crear" style="margin-left: 37%;">
                 <h3> Entrega Equipos </h3>
             </v-card-title>
@@ -34,13 +35,14 @@
         <br>
         <br>
 
-        <v-card style=" border: 5px solid green ; border-radius:20px;" class="mx-auto" max-width="890" v-if="tablaPrestamo" elevation="15">
+        <v-card style=" border: 5px solid green ; border-radius:20px;" class="mx-auto" max-width="890"
+            v-if="tablaPrestamo" elevation="15">
             <hr>
             <center>
                 <h5>Prestamos</h5>
             </center>
             <v-container>
-                <v-data-table :headers="headers" :items="prestamos" class="tbl">
+                <v-data-table :headers="headers" :items="prestamos" class="tbl" :hide-default-footer="true">
                     <template v-slot:item.codigo="{ item }">
                         {{ item.id }}
                     </template>
@@ -68,17 +70,23 @@
         <br>
         <br>
 
-        <v-card class="mx-auto" max-width="890" v-if="detalles" elevation="15" style="border: 5px solid green ; border-radius:20px;">
+        <v-card class="mx-auto" max-width="890" v-if="detalles" elevation="15"
+            style="border: 5px solid green ; border-radius:20px;">
             <hr>
             <center>
                 <h5>Detalle del Prestamo</h5>
             </center>
             <v-container>
 
-                <v-data-table :headers="headersDetalle" :items="DetalleSeleccionado" class="tbl">
+                <v-data-table :headers="headersDetalle" :items="DetallesPrestamos" class="tbl"
+                    :hide-default-footer="true">
+
+                    <template v-slot:item.codigo="{ item }">
+                        {{ item.codigo }}
+                    </template>
 
                     <template v-slot:item.tipoEquipo="{ item }">
-                        {{ item.tipoEquipo.tipo }}
+                        {{ item.tipoEquipo }}
                     </template>
 
                     <template v-slot:item.serial="{ item }">
@@ -86,18 +94,18 @@
                     </template>
 
                     <template v-slot:item.estadoPrestamo="{ item }">
-                        {{ item.estadoPrestamo.estado }}
+                        {{ item.estadoDelEquipo }}
                     </template>
 
-
-                    <template v-slot:item.accion="{ item }">
-                        <v-btn v-if="item.idEstadoPrestamo !== 2" style="width: 30px; height: 30px; font-size: 10px;"
-                            color="success" @click="AbrirActualizar">
-                            Procesar
-                        </v-btn>
-                    </template>
 
                 </v-data-table>
+
+
+                <v-btn style="width: 40px; height: 40px; font-size: 10px; color: black; float: right; margin-top: 20px;"
+                    color="success" @click="AbrirActualizar">
+                    Procesar
+                </v-btn>
+
 
                 <v-dialog v-model="dialogActualizar" max-width="500px">
                     <v-card>
@@ -112,7 +120,8 @@
                             <v-btn color="red darken-1" text @click="closeAceptar()">
                                 Cancelar
                             </v-btn>
-                            <v-btn color="blue darken-1" text @click="ActualizarItem()">
+                            <v-btn color="blue darken-1" :disabled="dialogProgreso" :loading="dialogProgreso" text
+                                @click="ActualizarItem()">
                                 Aceptar
                             </v-btn>
                         </v-card-actions>
@@ -128,6 +137,14 @@
             <br>
             <br>
         </v-card>
+        <v-dialog v-model="dialogProgreso" :scrim="false" persistent width="auto">
+            <v-card color="primary">
+                <v-card-text style="color: aliceblue;">
+                    ¡Espere un momento, por favor!
+                    <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
 
     </div>
 </template>
@@ -144,15 +161,16 @@ export default {
             { text: 'Acción', value: 'accion' },
         ],
         headersDetalle: [
+            { text: 'Codigo', value: 'codigo' },
             { text: 'Tipo', value: 'tipoEquipo' },
             { text: 'Serial', value: 'serial' },
-            { text: 'Estado', value: 'estadoPrestamo' },
-            { text: 'Acción', value: 'accion' },
+            { text: 'Estado', value: 'estadoPrestamo' }
         ],
         data: [],
         tablaPrestamo: false,
         detalles: false,
         dialogActualizar: false,
+        dialogProgreso: false,
         DetalleSeleccionado: [],
         cedulaSeleccionada: null,
         cedulauser: [],
@@ -163,6 +181,7 @@ export default {
     watch: {
         dialog(val) {
             val || this.close()
+            setTimeout(() => (this.dialogActualizar), 2000)
         },
         dialogDelete(val) {
             val || this.closeDelete()
@@ -177,7 +196,7 @@ export default {
                 try {
                     const response = await axios.get('http://localhost:62000/prestamos/obtener_prestamo/' + this.cedulaSeleccionada);
                     this.prestamos = response.data;
-                    console.log(this.prestamos);
+                    console.log('Prestamos del usuario', this.prestamos);
                     if (this.prestamos.length === 0) {
                         this.tablaDetalle = false;
                         this.cedulaSeleccionada = null;
@@ -189,6 +208,7 @@ export default {
                                 const detallePrestamo = {
                                     codigo: detalle.equipo.codigo,
                                     serial: detalle.equipo.serial,
+                                    estadoDelEquipo: detalle.equipo.estado.estado,
                                     fechaInicio: detalle.fecha_prestamo,
                                     fechaFin: detalle.fecha_devolucion,
                                     tipoEquipo: detalle.equipo.tipo.tipo,
@@ -199,7 +219,7 @@ export default {
                                 this.DetallesPrestamos.push(detallePrestamo);
                             });
                         });
-                        console.log(this.DetallesPrestamos);
+                        console.log('Detalles del prestamo', this.DetallesPrestamos);
                     }
                 } catch (error) {
                     console.error('Error al obtener detalles de préstamo:' + error);
@@ -229,23 +249,44 @@ export default {
         },
         async ActualizarItem() {
             try {
+                this.dialogProgreso = true;
                 let idActualizar = 2;
-                let idPrestamoActualizar = this.DetalleSeleccionado[0].idPrestamo;
+                let idPrestamoActualizar = this.prestamos[0].id;
                 console.log('idEstado', idActualizar);
                 console.log('idPrestamo', idPrestamoActualizar);
                 await axios.put(`http://localhost:62000/prestamos/actualizar_estado/${idPrestamoActualizar}/${idActualizar}`)
                     .then(() => {
-                        Swal.fire('', '', 'success');
-                        this.dialogActualizar = false;
-                        this.DetallesPrestamos = [];
-                        this.buscar();
-
+                        setTimeout(() => {
+                            Swal.fire('Actualizacion exitosa', '', 'success');
+                            this.dialogActualizar = false;
+                            this.DetallesPrestamos = [];
+                            this.dialogProgreso = false;
+                        }, 1000)
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000)
+                    }).catch(error => {
+                        setTimeout(() => {
+                            this.dialogActualizar = false;
+                            Swal.fire('', 'No se pudo cambiar el estado del prestamo' + error, 'error');
+                            this.DetallesPrestamos = [];
+                            this.dialogProgreso = false;
+                        }, 1000)
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000)
                     });
 
             } catch (error) {
-                Swal.fire('No se pudo cambiar el estado' + error + 'error');
-                console.error('Error:', error);
-                this.closeAceptar();
+                setTimeout(() => {
+                    Swal.fire('No se pudo cambiar el estado' + error + 'error');
+                    console.error('Error:', error);
+                    this.closeAceptar();
+                    this.dialogProgreso = false;
+                }, 1000)
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000)
             }
 
 

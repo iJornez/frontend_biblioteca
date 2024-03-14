@@ -52,34 +52,16 @@
             <v-row>
 
               <v-col cols="12">
-                <v-text-field v-model="editElement.codigo" label="Codigo" disabled dense outlined></v-text-field>
+                <v-text-field label="estado" disabled dense outlined></v-text-field>
               </v-col>
 
-              <v-col cols="12">
-                <v-text-field v-model="editElement.descripcion" label="Referencia" dense outlined></v-text-field>
-              </v-col>
-
-              <v-col cols="12">
-                <v-text-field v-model="editElement.serial" label="Serial" dense outlined></v-text-field>
-              </v-col>
-
-              <v-col cols="12">
-                <v-select v-model="editElement.estado" :items="estadosEquipo" item-text="estado" item-value="id"
-                  label="Estado" required dense outlined></v-select>
-              </v-col>
-
-              <v-col cols="12">
-                
-                <v-select v-model="editElement.tipo" :items="tipoEquipo" item-text="tipo" item-value="id" label="Tipo"
-                  required dense outlined></v-select>
-              </v-col>
 
             </v-row>
 
           </v-container>
 
         </v-card-text>
-        
+
         <v-card-actions>
 
           <v-spacer></v-spacer>
@@ -130,18 +112,6 @@ export default {
   },
 
 
-  async mounted() {
-    const token = this.$store.getters.usuario.access_token;
-    const tokenDecodified = jwtDecode(token);
-    this.datosUsuario = {
-      cedula: tokenDecodified.cedula,
-      nombre: tokenDecodified.nombre
-    };
-    await this.prestamosDelUsuario();
-  },
-
-
-
   methods: {
     async prestamosDelUsuario() {
       const cedula = this.datosUsuario.cedula;
@@ -169,13 +139,25 @@ export default {
       })
     },
 
-    AbrirDetalles() {
+    AbrirDetalles(item) {
+      const detalles = [item];
+      console.log(detalles);
       this.dialog = true;
     },
     formatearFechas(date) {
       const Fechasformateadas = new Date(date).toLocaleString();
       return Fechasformateadas;
     },
+  },
+
+  mounted() {
+    const token = this.$store.getters.usuario.access_token;
+    const tokenDecodified = jwtDecode(token);
+    this.datosUsuario = {
+      cedula: tokenDecodified.cedula,
+      nombre: tokenDecodified.nombre
+    };
+    this.prestamosDelUsuario();
   },
 
 

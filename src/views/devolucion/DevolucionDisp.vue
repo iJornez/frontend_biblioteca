@@ -1,7 +1,8 @@
 <template>
     <div style="margin-top: 200px;">
 
-        <v-card class="mx-auto" max-width="890" elevation="15" style="margin-top: 50px;  border: 5px solid green ; border-radius:20px;">
+        <v-card class="mx-auto" max-width="890" elevation="15"
+            style="margin-top: 50px;  border: 5px solid green ; border-radius:20px;">
             <v-card-title class="crear" style="margin-left: 37%; ">
                 <h3> Devolucion de Equipos </h3>
             </v-card-title>
@@ -13,8 +14,8 @@
                     <v-col cols="10">
 
                         <v-autocomplete v-model="cedulaSeleccionada" dense filled rounded solo class="buscar"
-                            :no-data-text="'No hay resultados'" :items="cedulauser" item-text="cedula" item-value="cedula"
-                            label="CEDULA">
+                            :no-data-text="'No hay resultados'" :items="cedulauser" item-text="cedula"
+                            item-value="cedula" label="CEDULA">
                         </v-autocomplete>
 
                     </v-col>
@@ -36,7 +37,7 @@
         <br>
 
         <v-dialog v-model="dialog" max-width="500px">
-            <v-card >
+            <v-card>
 
                 <v-card-title>
                     <span class="text-h5">Devolucion de Equipo</span>
@@ -79,15 +80,17 @@
         <br>
         <br>
 
-        <v-card style=" border: 5px solid green ; border-radius:20px;" class="mx-auto" max-width="890" v-if="tablaPrestamo" elevation="15">
-         <br>
+        <v-card style=" border: 5px solid green ; border-radius:20px;" class="mx-auto" max-width="890"
+            v-if="tablaPrestamo" elevation="15">
+            <br>
             <center>
                 <h5>Prestamos</h5>
             </center>
             <hr>
             <v-container>
 
-                <v-data-table :headers="headers" :no-data-text="'No hay equipos para devolver'" :items="DetallesPrestamos" class="tbl">
+                <v-data-table :headers="headers" :no-data-text="'No hay equipos para devolver'"
+                    :items="DetallesPrestamos" :hide-default-footer="true" class="tbl">
 
                     <template v-slot:item.codigo="{ item }">
                         {{ item.codigo }}
@@ -125,7 +128,7 @@
     </div>
 </template>
 
-      
+
 
 <script>
 
@@ -317,7 +320,7 @@ export default {
 
 </script>
 
-      
+
 
 <style scoped>
 .mx-auto {
@@ -410,4 +413,4 @@ h5 {
     background-color: #f2f2f2;
 
 }
-</style>  
+</style>
