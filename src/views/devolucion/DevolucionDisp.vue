@@ -36,6 +36,112 @@
         <br>
         <br>
 
+
+        <v-card style=" border: 5px solid green ; border-radius:20px;" class="mx-auto" max-width="890"
+        v-if="tablaPrestamo" elevation="15">
+        <br>
+        <center>
+            <h5>Prestamos</h5>
+        </center>
+        <hr>
+        <v-container>
+
+            <v-data-table :headers="headers" :no-data-text="'No hay equipos para devolver'"
+                :items="prestamos" :hide-default-footer="true" class="tbl">
+
+                <template v-slot:item.id="{ item }">
+                    {{ item.id }}
+                </template>
+
+                <template v-slot:item.fechaInicio="{ item }">
+                    {{ formatearFechas(item.fecha_prestamo) }}
+                </template>
+
+                <template v-slot:item.fechaFin="{ item }">
+                    {{ formatearFechas(item.fecha_devolucion) }}
+                </template>
+
+                <template v-slot:item.accion="{ item }">
+                    <v-icon small class="mr-2" v-on="on" v-bind="attrs"
+                        @click="MostrarDetalles(item)">reviews</v-icon>
+                </template>
+
+            </v-data-table>
+
+        </v-container>
+
+        <br>
+    </v-card>
+    <br>
+    <br>
+
+
+    <v-card class="mx-auto" max-width="890" v-if="tablaDetalle" elevation="15"
+    style="border: 5px solid green ; border-radius:20px;">
+    <hr>
+    <center>
+        <h5>Detalle de devolucion</h5>
+    </center>
+    <v-container>
+
+        <v-data-table :headers="headersDetalle" :items="detalleSeleccionado" class="tbl"
+            :hide-default-footer="true">
+
+            <template v-slot:item.codigo="{ item }">
+                {{ item.codigo }}
+            </template>
+
+            <template v-slot:item.tipoEquipo="{ item }">
+                {{ item.tipoEquipo }}
+            </template>
+
+            <template v-slot:item.serial="{ item }">
+                {{ item.serial }}
+            </template>
+
+            <template v-slot:item.accion="{ item }">
+                <v-icon small class="mr-2" v-on="on" v-bind="attrs"
+                    @click="MostrarDialogoObservacion(item)">reviews</v-icon>
+            </template>
+
+
+
+        </v-data-table>
+
+        <v-dialog v-model="dialogActualizar" max-width="500px">
+            <v-card>
+                <v-card-title>
+                    <span class="text-h5">Confirmación de cambio</span>
+                </v-card-title>
+                <v-card-text>
+                    ¿Estás seguro de que quieres cambiar el estado de este prestamo?
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="red darken-1" text @click="closeAceptar()">
+                        Cancelar
+                    </v-btn>
+                    <v-btn color="blue darken-1" :disabled="dialogProgreso" :loading="dialogProgreso" text
+                        @click="ActualizarItem()">
+                        Aceptar
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+    </v-container>
+
+    <br>
+    <center>
+
+    </center>
+    <br>
+    <br>
+</v-card>
+
+
+
+
         <v-dialog v-model="dialog" max-width="500px">
             <v-card>
 
@@ -80,50 +186,7 @@
         <br>
         <br>
 
-        <v-card style=" border: 5px solid green ; border-radius:20px;" class="mx-auto" max-width="890"
-            v-if="tablaPrestamo" elevation="15">
-            <br>
-            <center>
-                <h5>Prestamos</h5>
-            </center>
-            <hr>
-            <v-container>
-
-                <v-data-table :headers="headers" :no-data-text="'No hay equipos para devolver'"
-                    :items="DetallesPrestamos" :hide-default-footer="true" class="tbl">
-
-                    <template v-slot:item.codigo="{ item }">
-                        {{ item.codigo }}
-                    </template>
-
-                    <template v-slot:item.fechaInicio="{ item }">
-                        {{ formatearFechas(item.fechaInicio) }}
-                    </template>
-
-                    <template v-slot:item.fechaFin="{ item }">
-                        {{ formatearFechas(item.fechaFin) }}
-                    </template>
-
-                    <template v-slot:item.tipoEquipo="{ item }">
-                        {{ item.tipoEquipo }}
-                    </template>
-
-                    <template v-slot:item.serial="{ item }">
-                        {{ item.serial }}
-                    </template>
-
-                    <template v-slot:item.accion="{ item }">
-                        <v-icon small class="mr-2" v-on="on" v-bind="attrs"
-                            @click="MostrarDialogoObservacion(item)">reviews</v-icon>
-                    </template>
-
-                </v-data-table>
-
-            </v-container>
-
-            <br>
-        </v-card>
-
+        
 
     </div>
 </template>
@@ -140,13 +203,17 @@ export default {
     data: () => ({
         headers: [
 
-            { text: 'Código', value: 'codigo' },
+            { text: 'IdPrestamo', value: 'id' },
             { text: 'Fecha Inicio', value: 'fechaInicio' },
             { text: 'Fecha Fin', value: 'fechaFin' },
-            { text: 'Tipo', value: 'tipoEquipo' },
-            { text: 'Serial', value: 'serial' },
             { text: 'accion', value: 'accion' },
 
+        ],
+        headersDetalle:[
+            { text: 'Codigo', value: 'equipo.codigo' },
+            { text: 'Tipo', value: 'equipo.tipo.tipo' },
+            { text: 'Serial', value: 'equipo.serial' },
+            { text: 'Accion', value: 'accion' }
         ],
 
         data: [],
@@ -176,7 +243,7 @@ export default {
                 try {
                     const response = await axios.get('http://localhost:62000/prestamos/obtener_prestamo/' + this.cedulaSeleccionada);
                     this.prestamos = response.data;
-
+                    console.log(this.prestamos);
                     if (this.prestamos.length === 0) {
                         this.tablaDetalle = false;
                         this.cedulaSeleccionada = null;
@@ -241,14 +308,16 @@ export default {
                 }
             });
         },
-        MostrarDialogoObservacion(item) {
-            this.detalleSeleccionado = [item];
+        MostrarDialogoObservacion() {
+    
             this.dialog = true;
             console.log('Detalle del prestamo seleccionado', this.detalleSeleccionado);
         },
 
-        MostrarDetalles() {
+        MostrarDetalles(item) {
             this.tablaDetalle = true;
+            this.detalleSeleccionado = this.prestamos.find(prestamo => prestamo.id === item.id).prestamo_detalle;
+            console.log('xxxaa',this.detalleSeleccionado);
         },
 
         mostrarObservacion(itemSeleccionado) {

@@ -113,7 +113,7 @@
 
     <v-card class="mx-auto" v-if="MostrarTabla" max-width="900" elevation="15">
       <center>
-        <v-data-table :headers="headers" :items="datosPreGuardados" :items-per-page="5" class="elevation-8">
+        <v-data-table :headers="headers" :items="datosPreGuardados" :items-per-page="5" class="elevation-8" :hide-default-footer="true">
 
           <template v-slot:item.nombre="{ item }">
             {{ item.tipo.nombre }}
@@ -290,6 +290,9 @@ export default {
             this.dialog = false;
             Swal.fire('', '¡Préstamo registrado con éxito!', 'success');
           }, 2500);
+          setTimeout(()=> {
+            window.location.reload();
+          },3500)
           this.VaciarStorage();
         })
         .catch(error => {
@@ -303,6 +306,9 @@ export default {
               this.VaciarStorage();
             }
           }, 2500)
+          setTimeout(()=>{
+            window.location.reload();
+          }, 3500)
         });
       console.log('Paquete para prestar', paquetePrestamo);
     },
@@ -494,7 +500,6 @@ export default {
   watch: {
     dialog(val) {
       if (!val) return
-
       setTimeout(() => (this.dialog = false), 2500)
     },
     dialogDelete(val) {
@@ -509,7 +514,6 @@ export default {
   },
 
   mounted() {
-    this.MostrarTabla = false;
     const token = this.$store.getters.usuario.access_token;
     const tokenDecodified = jwtDecode(token);
     this.datosUsuario = {
@@ -524,8 +528,8 @@ export default {
     this.cargarDatosGuardados();
     this.listarUsuarios();
     const mostrarTablaGuardado = localStorage.getItem('mostrarTabla');
-    if (mostrarTablaGuardado) {
-      this.MostrarTabla = JSON.parse(mostrarTablaGuardado);
+    if (mostrarTablaGuardado === null) {
+      this.MostrarTabla = false;
     }
   },
 

@@ -1,16 +1,18 @@
-
 <template>
   <div style="width:1700px; margin-left:20%; margin-top:200px;">
-    <v-toolbar dark prominent elevation="15"
-      src="https://img.freepik.com/foto-gratis/fondo-azul-degradado-lujo-abstracto-azul-oscuro-liso-banner-estudio-vineta-negra_1258-54587.jpg">
+    <v-toolbar dark prominent elevation="15" style="background: linear-gradient(135deg,#20901A, #46B838, #81E746);">
 
 
-      <v-toolbar-title>LISTADO DE DISPOSITIVOS</v-toolbar-title>
+      <v-toolbar-title style="color: black;">LISTADO DE DISPOSITIVOS</v-toolbar-title>
 
 
 
 
     </v-toolbar>
+    <v-file-input v-model="paquete.excel" counter show-size truncate-length="18"></v-file-input>
+    <v-btn color="primary" @click="subirmasivo">
+      Enviar
+    </v-btn>
     <br>
     <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1">
       <template v-slot:item.actions="{ item }">
@@ -48,6 +50,10 @@
 
               <v-col cols="12" sm="6" md="4">
                 <v-text-field v-model="editElement.serial" label="Serial" dense outlined></v-text-field>
+              </v-col>
+
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field v-model="editElement.telefonica" label="Serial-telefonica" dense outlined></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="6" md="4">
@@ -96,6 +102,8 @@
       </v-card>
     </v-dialog>
 
+
+
   </div>
 </template>
 
@@ -114,6 +122,7 @@ export default {
       codigo: null,
       descripcion: null,
       serial: null,
+      telefonica: null,
       estado: null,
       tipo: null
     },
@@ -127,6 +136,7 @@ export default {
       { text: 'Codigo', value: 'codigo' },
       { text: 'Referencia', value: 'descripcion' },
       { text: 'Serial', value: 'serial' },
+      { text: 'Serial-telefonica', value: 'telefonica' },
       { text: 'Estado', value: 'estado.estado' },
       { text: 'Tipo', value: 'tipo.tipo' },
       { text: 'Actions', value: 'actions', sortable: false },
@@ -135,6 +145,9 @@ export default {
     tipoEquipo: [],
     estadosEquipo: [],
     checkbox: false,
+    paquete:{
+      excel: null
+    }
 
   }),
 
@@ -181,6 +194,12 @@ export default {
           'success'
         );
       });
+    },
+
+    async subirmasivo(){
+      await axios.postForm('http://localhost:62000/equipos/subirMasivo', this.paquete).then(resp => {
+        console.log(resp.data);
+      })
     },
 
     async listarEstados() {
@@ -246,4 +265,3 @@ export default {
 
 
 </script>
-

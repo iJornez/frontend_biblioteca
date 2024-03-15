@@ -274,8 +274,9 @@ export default {
 
 .color {
     /* Permalink - use to edit and share this gradient. Enlace permanente - úsalo para editar y compartir este gradiente: https://colorzilla.com/gradient-editor/#1e5799+0,207cca+44,2989d8+50 */
-    background: linear-gradient(135deg, rgba(30, 87, 153, 1) 0%, rgba(32, 124, 202, 1) 44%, rgba(41, 137, 216, 1) 50%);
+    background: linear-gradient(135deg,#20901A, #46B838, #81E746);
     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 
 }
 </style>
+ 

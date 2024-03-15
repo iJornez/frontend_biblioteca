@@ -78,7 +78,7 @@
             </center>
             <v-container>
 
-                <v-data-table :headers="headersDetalle" :items="DetallesPrestamos" class="tbl"
+                <v-data-table :headers="headersDetalle" :items="DetalleSeleccionado" class="tbl"
                     :hide-default-footer="true">
 
                     <template v-slot:item.codigo="{ item }">
@@ -103,7 +103,7 @@
 
                 <v-btn style="width: 40px; height: 40px; font-size: 10px; color: black; float: right; margin-top: 20px;"
                     color="success" @click="AbrirActualizar">
-                    Procesar
+                   <b>Procesar</b> 
                 </v-btn>
 
 
@@ -161,10 +161,10 @@ export default {
             { text: 'Acción', value: 'accion' },
         ],
         headersDetalle: [
-            { text: 'Codigo', value: 'codigo' },
-            { text: 'Tipo', value: 'tipoEquipo' },
-            { text: 'Serial', value: 'serial' },
-            { text: 'Estado', value: 'estadoPrestamo' }
+            { text: 'Codigo', value: 'equipo.codigo' },
+            { text: 'Tipo', value: 'equipo.tipo.tipo' },
+            { text: 'Serial', value: 'equipo.serial' },
+            { text: 'Estado', value: 'equipo.estado.estado' }
         ],
         data: [],
         tablaPrestamo: false,
@@ -301,8 +301,8 @@ export default {
 
         MostrarDetalles(item) {
             this.detalles = true;
-            this.DetalleSeleccionado = [item];
-            console.log('Aqui', item);
+            this.DetalleSeleccionado = this.prestamos.find(prestamo => prestamo.id === item.id).prestamo_detalle;
+            console.log('Detalles del prestamo seleccionado', this.DetallesPrestamos);
         },
 
         cancel() {

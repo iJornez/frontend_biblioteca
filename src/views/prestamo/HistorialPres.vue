@@ -19,7 +19,7 @@
 
 
 
-    <v-data-table :headers="headers" :items="prestamos" class="elevation-15">
+    <v-data-table :headers="headers" :items="prestamos" class="elevation-15" :hide-default-footer="true">
 
       <template v-slot:item.fecha_prestamo="{ item }">
         {{ formatearFechas(item.fecha_prestamo) }}
@@ -90,7 +90,7 @@ export default {
 
     return {
 
-      dialog: true,
+      dialog: false,
       headers: [
         { text: 'Cedula', value: 'usuario.cedula' },
         { text: 'Nombre', value: 'usuario.nombre' },

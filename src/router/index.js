@@ -83,7 +83,7 @@ const routes = [{
                 },
             ]
         },
-        
+
         {
             name: 'DashboardWelcome',
             path: '/dashboard/listado',
