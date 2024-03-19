@@ -51,8 +51,21 @@
 
             <v-row>
 
-              <v-col cols="12">
-                <v-text-field label="estado" disabled dense outlined></v-text-field>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field v-model="paqueteDelDetalle.telefonica" label="Serial de telefonia" disabled dense
+                  outlined></v-text-field>
+              </v-col>
+
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field v-model="paqueteDelDetalle.marca" label="Marca" dense outlined disabled></v-text-field>
+              </v-col>
+
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field v-model="paqueteDelDetalle.serial" label="Serial" dense outlined disabled></v-text-field>
+              </v-col>
+
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field v-model="paqueteDelDetalle.tipo" label="Tipo" dense outlined disabled></v-text-field>
               </v-col>
 
 
@@ -107,6 +120,13 @@ export default {
       datosUsuario: {
         cedula: '',
         nombre: ''
+      },
+      paqueteDelDetalle: {
+        telefonica: null,
+        marca: null,
+        serial: null,
+        estado: null,
+        tipo: null,
       }
     }
   },
@@ -121,8 +141,9 @@ export default {
         this.prestamos.forEach(prestamo => {
           prestamo.prestamo_detalle.forEach(detalle => {
             const detallePrestamo = {
-              codigo: detalle.equipo.codigo,
               serial: detalle.equipo.serial,
+              marca: detalle.equipo.marca,
+              telefonica: detalle.equipo.telefonica,
               fechaInicio: detalle.fecha_prestamo,
               fechaFin: detalle.fecha_devolucion,
               tipoEquipo: detalle.equipo.tipo.tipo,
@@ -140,10 +161,19 @@ export default {
     },
 
     AbrirDetalles(item) {
-      const detalles = [item];
-      console.log(detalles);
-      this.dialog = true;
+      const detalle = this.detallesPrestamo.find(detalle => detalle.idPrestamo === item.id);
+      if (detalle) {
+        this.paqueteDelDetalle.telefonica = detalle.telefonica;
+        this.paqueteDelDetalle.marca = detalle.marca;
+        this.paqueteDelDetalle.serial = detalle.serial;
+        this.paqueteDelDetalle.estado = detalle.idEstadoPrestamo;
+        this.paqueteDelDetalle.tipo = detalle.tipoEquipo;
+        this.dialog = true;
+      } else {
+        console.log('No se encontró el detalle del prestamo correspondiente');
+      }
     },
+
     formatearFechas(date) {
       const Fechasformateadas = new Date(date).toLocaleString();
       return Fechasformateadas;

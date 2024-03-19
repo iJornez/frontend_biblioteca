@@ -87,18 +87,23 @@
         <v-data-table :headers="headersDetalle" :items="detalleSeleccionado" class="tbl"
             :hide-default-footer="true">
 
-            <template v-slot:item.codigo="{ item }">
-                {{ item.codigo }}
+            <template v-slot:item.serial="{ item }">
+                {{ item.serial }}
+            </template>
+
+            <template v-slot:item.telefonica="{ item }">
+                {{ item.telefonica }}
+            </template>
+
+            <template v-slot:item.marca="{ item }">
+                {{ item.marca }}
             </template>
 
             <template v-slot:item.tipoEquipo="{ item }">
                 {{ item.tipoEquipo }}
             </template>
 
-            <template v-slot:item.serial="{ item }">
-                {{ item.serial }}
-            </template>
-
+            
             <template v-slot:item.accion="{ item }">
                 <v-icon small class="mr-2" v-on="on" v-bind="attrs"
                     @click="MostrarDialogoObservacion(item)">reviews</v-icon>
@@ -210,8 +215,9 @@ export default {
 
         ],
         headersDetalle:[
-            { text: 'Codigo', value: 'equipo.codigo' },
+            { text: 'Serial de telefonia', value: 'equipo.telefonica' },
             { text: 'Tipo', value: 'equipo.tipo.tipo' },
+            { text: 'Marca', value: 'equipo.marca' },
             { text: 'Serial', value: 'equipo.serial' },
             { text: 'Accion', value: 'accion' }
         ],
@@ -248,14 +254,17 @@ export default {
                         this.tablaDetalle = false;
                         this.cedulaSeleccionada = null;
                         Swal.fire('La cedula seleccionada no tiene prestamos asignados!', '', 'error');
+                        this.tablaPrestamo = false;
                     } else {
+                        this.prestamos = this.prestamos.filter(prestamo => prestamo.estado_prestamo.id === 2);
                         this.tablaPrestamo = true;
                         this.prestamos.forEach(prestamo => {
                             prestamo.prestamo_detalle.forEach(detalle => {
                                 const ID_RESERVADO = 1;
                                 if (detalle.equipo.estado.id === ID_RESERVADO) {
                                     const detallePrestamo = {
-                                        codigo: detalle.equipo.codigo,
+                                        telefonica: detalle.equipo.telefonica,
+                                        marca: detalle.equipo.marca,
                                         serial: detalle.equipo.serial,
                                         fechaInicio: detalle.fecha_prestamo,
                                         fechaFin: detalle.fecha_devolucion,
@@ -351,8 +360,8 @@ export default {
             } else {
                 try {
                     let idDelEstado = this.estadoSeleccionado;
-                    let idDelEquipo = this.detalleSeleccionado[0].codigo;
-                    console.log('codigo a enviar', idDelEquipo);
+                    let idDelEquipo = this.detalleSeleccionado[0].serial;
+                    console.log('serial a enviar', idDelEquipo);
                     console.log('idEstado a enviar', idDelEstado);
                     const paquete = {
                         idPrestamo: parseInt(this.detalleSeleccionado[0].idPrestamo),

@@ -8,16 +8,14 @@
 
     <v-card-text>
       <v-form ref="form" v-model="valid" lazy-validation>
-        <v-text-field v-model="paquete.codigo" :counter="10" :rules="nameRules" label="Codigo" required>
-        </v-text-field>
-
-        <v-text-field v-model="paquete.descripcion" :rules="nameRules" label="Referencia" required>
+        
+        <v-text-field v-model="paquete.marca" :rules="nameRules" label="Marca" required>
         </v-text-field>
 
         <v-text-field v-model="paquete.serial" :rules="nameRules" label="Serial" required>
         </v-text-field>
 
-        <v-text-field v-model="paquete.telefonica" :rules="nameRules" label="Serial telefonica" required>
+        <v-text-field v-model="paquete.telefonica" :rules="nameRules" label="Serial de telefonia" required>
         </v-text-field>
 
         <v-select v-model="paquete.estado" :items="items" item-text="estado" item-value="id"
@@ -41,10 +39,9 @@ import Swal from "sweetalert2";
 export default {
   data: () => ({
     paquete: {
-      codigo: null,
       serial: null,
       telefonica: null,
-      descripcion: null,
+      marca: null,
       estado: null,
       tipo: 'Portatil'
     },
@@ -97,8 +94,8 @@ export default {
     },
 
     async limpiarDatos() {
-      this.paquete.codigo = null;
-      this.paquete.descripcion = null;
+      this.paquete.telefonica = null;
+      this.paquete.marca = null;
       this.paquete.serial = null;
       this.paquete.telefonica = null;
       this.paquete.estado = null;

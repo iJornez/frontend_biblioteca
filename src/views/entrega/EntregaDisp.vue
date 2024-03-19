@@ -42,8 +42,8 @@
                 <h5>Prestamos</h5>
             </center>
             <v-container>
-                <v-data-table :headers="headers" :items="prestamos" class="tbl" :hide-default-footer="true">
-                    <template v-slot:item.codigo="{ item }">
+                <v-data-table :headers="headers" :items="prestamosFiltrados" class="tbl" :hide-default-footer="true">
+                    <template v-slot:item.telefonica="{ item }">
                         {{ item.id }}
                     </template>
 
@@ -81,17 +81,22 @@
                 <v-data-table :headers="headersDetalle" :items="DetalleSeleccionado" class="tbl"
                     :hide-default-footer="true">
 
-                    <template v-slot:item.codigo="{ item }">
-                        {{ item.codigo }}
+                    <template v-slot:item.serial="{ item }">
+                        {{ item.serial }}
+                    </template>
+
+                    <template v-slot:item.telefonica="{ item }">
+                        {{ item.telefonica }}
+                    </template>
+
+                    <template v-slot:item.marca="{ item }">
+                        {{ item.marca }}
                     </template>
 
                     <template v-slot:item.tipoEquipo="{ item }">
                         {{ item.tipoEquipo }}
                     </template>
 
-                    <template v-slot:item.serial="{ item }">
-                        {{ item.serial }}
-                    </template>
 
                     <template v-slot:item.estadoPrestamo="{ item }">
                         {{ item.estadoDelEquipo }}
@@ -103,7 +108,7 @@
 
                 <v-btn style="width: 40px; height: 40px; font-size: 10px; color: black; float: right; margin-top: 20px;"
                     color="success" @click="AbrirActualizar">
-                   <b>Procesar</b> 
+                    <b>Procesar</b>
                 </v-btn>
 
 
@@ -161,8 +166,9 @@ export default {
             { text: 'Acción', value: 'accion' },
         ],
         headersDetalle: [
-            { text: 'Codigo', value: 'equipo.codigo' },
+            { text: 'Telefonica', value: 'equipo.telefonica' },
             { text: 'Tipo', value: 'equipo.tipo.tipo' },
+            { text: 'Marca', value: 'equipo.marca' },
             { text: 'Serial', value: 'equipo.serial' },
             { text: 'Estado', value: 'equipo.estado.estado' }
         ],
@@ -176,6 +182,7 @@ export default {
         cedulauser: [],
         DetallesPrestamos: [],
         prestamos: [],
+        prestamosFiltrados: [],
 
     }),
     watch: {
@@ -201,13 +208,16 @@ export default {
                         this.tablaDetalle = false;
                         this.cedulaSeleccionada = null;
                         Swal.fire('La cedula seleccionada no tiene prestamos asignados!', '', 'error');
+                        this.tablaPrestamo = false;
                     } else {
-                        this.tablaPrestamo = true;
+                        this.prestamosFiltrados = this.prestamos.filter(prestamo => prestamo.estado_prestamo.id === 1);
                         this.prestamos.forEach(prestamo => {
+                            this.tablaPrestamo = true;
                             prestamo.prestamo_detalle.forEach(detalle => {
                                 const detallePrestamo = {
-                                    codigo: detalle.equipo.codigo,
+                                    telefonica: detalle.equipo.telefonica,
                                     serial: detalle.equipo.serial,
+                                    marca: detalle.equipo.marca,
                                     estadoDelEquipo: detalle.equipo.estado.estado,
                                     fechaInicio: detalle.fecha_prestamo,
                                     fechaFin: detalle.fecha_devolucion,
@@ -218,6 +228,8 @@ export default {
                                 };
                                 this.DetallesPrestamos.push(detallePrestamo);
                             });
+
+
                         });
                         console.log('Detalles del prestamo', this.DetallesPrestamos);
                     }

@@ -1,51 +1,31 @@
 <template>
-  <v-card class="mx-auto" max-width="900"  elevation="15">
-    <v-img src="https://png.pngtree.com/thumb_back/fh260/background/20220314/pngtree-digital-accessories-hdmi-data-cable-image_1054434.jpg"
+  <v-card class="mx-auto" max-width="900" elevation="15">
+    <v-img
+      src="https://png.pngtree.com/thumb_back/fh260/background/20220314/pngtree-digital-accessories-hdmi-data-cable-image_1054434.jpg"
       height="350px"></v-img>
 
     <v-card-title class="crear"> Crear Cable Hdmi </v-card-title>
 
     <v-card-text>
       <v-form ref="form" v-model="valid" lazy-validation>
-        <v-text-field 
-        v-model="paquete.codigo" 
-        :counter="10" 
-        :rules="nameRules" 
-        label="Codigo" 
-        required>
+        
+        <v-text-field v-model="paquete.marca" :rules="nameRules" label="Marca" required>
         </v-text-field>
 
-        <v-text-field 
-        v-model="paquete.descripcion" 
-        :rules="nameRules" 
-        label="Referencia" 
-        required>
+        <v-text-field v-model="paquete.serial" :rules="nameRules" label="Serial" required>
         </v-text-field>
 
-        <v-text-field 
-        v-model="paquete.serial" 
-        :rules="nameRules" 
-        label="Serial" 
-        required>
-        </v-text-field>
-
-        <v-select 
-        v-model="paquete.estado" 
-        :items="items" 
-        item-text="estado" 
-        item-value="id"
-        :rules="[(v) => !!v || 'Campo requerido']" 
-        label="Estado" 
-        required>
+        <v-select v-model="paquete.estado" :items="items" item-text="estado" item-value="id"
+          :rules="[(v) => !!v || 'Campo requerido']" label="Estado" required>
         </v-select>
 
 
-<center>
+        <center>
 
-        <v-btn color="primary" class="mr-4" @click="enviar()"> Guardar </v-btn>
+          <v-btn color="primary" class="mr-4" @click="enviar()"> Guardar </v-btn>
 
-        <v-btn color="error" @click="resetValidation"> Cancelar </v-btn>
-      </center>
+          <v-btn color="error" @click="resetValidation"> Cancelar </v-btn>
+        </center>
       </v-form>
     </v-card-text>
   </v-card>
@@ -58,9 +38,9 @@ import Swal from "sweetalert2";
 export default {
   data: () => ({
     paquete: {
-      codigo: null,
+      telefonica: null,
       serial: null,
-      descripcion: null,
+      marca: null,
       estado: null,
       tipo: 'CableHDMI'
     },
@@ -73,25 +53,25 @@ export default {
 
   methods: {
 
-    async peticiones(){
+    async peticiones() {
       let nombre = "CableHDMI";
 
-    await axios.get('http://localhost:62000/tipos_equipos/obtenerTipoPorNombre/' + nombre).then(response => {
-      this.paquete.tipo = response.data[0].id;
-    });
+      await axios.get('http://localhost:62000/tipos_equipos/obtenerTipoPorNombre/' + nombre).then(response => {
+        this.paquete.tipo = response.data[0].id;
+      });
 
-    await axios.get('http://localhost:62000/equipos/obtener').then(response => {
-      console.log(response.data);
-    });
+      await axios.get('http://localhost:62000/equipos/obtener').then(response => {
+        console.log(response.data);
+      });
 
-    axios.get('http://localhost:62000/estadoequipo/obtener').then(response => {
-      console.log(response.data);
-      if (response.data.length > 0) {
-        console.log(response.data)
-        this.items = response.data;
-        console.log('aqui',this.items)
-      }
-    });
+      axios.get('http://localhost:62000/estadoequipo/obtener').then(response => {
+        console.log(response.data);
+        if (response.data.length > 0) {
+          console.log(response.data)
+          this.items = response.data;
+          console.log('aqui', this.items)
+        }
+      });
     },
 
     enviar() {
@@ -104,7 +84,7 @@ export default {
               '',
               'success'
             ),
-            this.limpiarDatos();
+              this.limpiarDatos();
             this.$refs.form.resetValidation();
           })
           .catch(function (error) {
@@ -117,18 +97,18 @@ export default {
       }
     },
 
-    async limpiarDatos(){
-        this.paquete.codigo = null;
-        this.paquete.descripcion = null;
-        this.paquete.serial = null;
-        this.paquete.estado = null;
-      }
+    async limpiarDatos() {
+      this.paquete.telefonica = null;
+      this.paquete.marca = null;
+      this.paquete.serial = null;
+      this.paquete.estado = null;
+    }
 
   },
   async mounted() {
-    
+
     this.peticiones();
-    
+
   }
 
 

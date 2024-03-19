@@ -74,7 +74,7 @@
                   <v-text-field v-model="paquete.horaInicio" label="Hora Inicio" prepend-icon="mdi-clock" readonly
                     v-bind="attrs" v-on="on" format="HH:mm"></v-text-field>
                 </template>
-                <v-time-picker v-model="paquete.horaInicio" no-title></v-time-picker>
+                <v-time-picker v-model="paquete.horaInicio"></v-time-picker>
               </v-menu>
             </v-col>
 
@@ -87,7 +87,7 @@
                   <v-text-field v-model="paquete.horaFinal" label="Hora Final" prepend-icon="mdi-clock" readonly
                     v-bind="attrs" v-on="on" format="HH:mm"></v-text-field>
                 </template>
-                <v-time-picker v-model="paquete.horaFinal" no-title></v-time-picker>
+                <v-time-picker v-model="paquete.horaFinal"></v-time-picker>
               </v-menu>
             </v-col>
 
@@ -113,7 +113,8 @@
 
     <v-card class="mx-auto" v-if="MostrarTabla" max-width="900" elevation="15">
       <center>
-        <v-data-table :headers="headers" :items="datosPreGuardados" :items-per-page="5" class="elevation-8" :hide-default-footer="true">
+        <v-data-table :headers="headers" :items="datosPreGuardados" :items-per-page="5" class="elevation-8"
+          :hide-default-footer="true">
 
           <template v-slot:item.nombre="{ item }">
             {{ item.tipo.nombre }}
@@ -290,9 +291,9 @@ export default {
             this.dialog = false;
             Swal.fire('', '¡Préstamo registrado con éxito!', 'success');
           }, 2500);
-          setTimeout(()=> {
+          setTimeout(() => {
             window.location.reload();
-          },3500)
+          }, 3500)
           this.VaciarStorage();
         })
         .catch(error => {
@@ -306,7 +307,7 @@ export default {
               this.VaciarStorage();
             }
           }, 2500)
-          setTimeout(()=>{
+          setTimeout(() => {
             window.location.reload();
           }, 3500)
         });

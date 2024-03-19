@@ -1,5 +1,5 @@
 <template>
-  <div style="width:1700px; margin-left:20%; margin-top:200px;">
+  <div class="contenedor">
     <v-toolbar dark prominent elevation="15" style="background: linear-gradient(135deg,#20901A, #46B838, #81E746);">
 
 
@@ -9,10 +9,6 @@
 
 
     </v-toolbar>
-    <v-file-input v-model="paquete.excel" counter show-size truncate-length="18"></v-file-input>
-    <v-btn color="primary" @click="subirmasivo">
-      Enviar
-    </v-btn>
     <br>
     <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1">
       <template v-slot:item.actions="{ item }">
@@ -41,19 +37,16 @@
             <v-row>
 
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editElement.codigo" label="Codigo" disabled dense outlined></v-text-field>
+                <v-text-field v-model="editElement.telefonica" label="Serial de telefonia" disabled dense
+                  outlined></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editElement.descripcion" label="Referencia" dense outlined></v-text-field>
+                <v-text-field v-model="editElement.marca" label="Referencia" dense outlined></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="6" md="4">
                 <v-text-field v-model="editElement.serial" label="Serial" dense outlined></v-text-field>
-              </v-col>
-
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editElement.telefonica" label="Serial-telefonica" dense outlined></v-text-field>
               </v-col>
 
               <v-col cols="12" sm="6" md="4">
@@ -73,10 +66,10 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialog = false">
-            Cancel
+            Cancelar
           </v-btn>
           <v-btn color="blue darken-1" text @click="save()">
-            Save
+            Guardar
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -102,7 +95,11 @@
       </v-card>
     </v-dialog>
 
-
+    <v-file-input v-model="paquete.excel" counter :max-size="1000000" :accept="'.xlsx'" @change="validarArchivo"
+      show-size truncate-length="18"></v-file-input>
+    <v-btn color="primary" @click="subirmasivo" :disabled="paquete.excel === null">
+      Enviar
+    </v-btn>
 
   </div>
 </template>
@@ -117,10 +114,9 @@ export default {
     dialog: false,
     dialogEliminar: false,
     search: '',
-    codigoDelete: null,
+    serialDelete: null,
     editElement: {
-      codigo: null,
-      descripcion: null,
+      marca: null,
       serial: null,
       telefonica: null,
       estado: null,
@@ -133,10 +129,9 @@ export default {
         sortable: false,
         value: 'id',
       },
-      { text: 'Codigo', value: 'codigo' },
-      { text: 'Referencia', value: 'descripcion' },
+      { text: 'Marca', value: 'marca' },
       { text: 'Serial', value: 'serial' },
-      { text: 'Serial-telefonica', value: 'telefonica' },
+      { text: 'Serial de telefonia', value: 'telefonica' },
       { text: 'Estado', value: 'estado.estado' },
       { text: 'Tipo', value: 'tipo.tipo' },
       { text: 'Actions', value: 'actions', sortable: false },
@@ -145,7 +140,7 @@ export default {
     tipoEquipo: [],
     estadosEquipo: [],
     checkbox: false,
-    paquete:{
+    paquete: {
       excel: null
     }
 
@@ -184,7 +179,7 @@ export default {
     },
 
     async deleteItem() {
-      await axios.delete('http://localhost:62000/equipos/' + this.codigoDelete).then(async (resp) => {
+      await axios.delete('http://localhost:62000/equipos/' + this.serialDelete).then(async (resp) => {
         console.log(resp.data);
         await this.listarEquipo();
         this.dialogEliminar = false;
@@ -196,9 +191,10 @@ export default {
       });
     },
 
-    async subirmasivo(){
+    async subirmasivo() {
       await axios.postForm('http://localhost:62000/equipos/subirMasivo', this.paquete).then(resp => {
         console.log(resp.data);
+        window.location.reload();
       })
     },
 
@@ -231,7 +227,7 @@ export default {
     },
     abrirEliminar(item) {
       this.dialogEliminar = true;
-      this.codigoDelete = item.codigo;
+      this.serialDelete = item.serial;
     },
     editItem(item) {
       console.log(item)
@@ -253,15 +249,37 @@ export default {
     closeDelete() {
       this.dialogEliminar = false;
     },
+    validarArchivo(file) {
+      if (file && file.size > 1000000) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'El archivo es demasiado grande. El tamaño máximo permitido es 1MB.',
+        });
+        this.paquete.excel = null;
+        return;
+      }
+
+      if (file && file.name.split('.').pop() !== 'xlsx') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'El tipo de archivo no es válido. Por favor, sube un archivo en formato excel',
+        });
+        this.paquete.excel = null;
+        return;
+      }
+    }
 
   },
 
 
 }
-
-
-
-
-
-
 </script>
+<style scoped>
+.contenedor {
+  width: 1000px;
+  margin-left: 20%;
+  margin-top: 200px;
+}
+</style>
