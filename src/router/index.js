@@ -32,6 +32,14 @@ const routes = [{
 
         },
         {
+            name: 'DashboardMiPerfil',
+            path: '/dashboard/miperfil',
+            component: () =>
+                import('../views/MiPerfil.vue'),
+
+
+        },
+        {
             name: 'DashboardEstadoUsuario',
             path: '/dashboard/estadousuario',
             component: () =>
@@ -120,6 +128,7 @@ const routes = [{
             component: () =>
                 import('../views/entrega/EntregaDisp.vue'),
         },
+
 
 
     ],

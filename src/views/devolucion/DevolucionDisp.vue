@@ -38,111 +38,111 @@
 
 
         <v-card style=" border: 5px solid green ; border-radius:20px;" class="mx-auto" max-width="890"
-        v-if="tablaPrestamo" elevation="15">
+            v-if="tablaPrestamo" elevation="15">
+            <br>
+            <center>
+                <h5>Prestamos</h5>
+            </center>
+            <hr>
+            <v-container>
+
+                <v-data-table :headers="headers" :no-data-text="'No hay equipos para devolver'" :items="prestamos"
+                    :hide-default-footer="true" class="tbl">
+
+                    <template v-slot:item.id="{ item }">
+                        {{ item.id }}
+                    </template>
+
+                    <template v-slot:item.fechaInicio="{ item }">
+                        {{ formatearFechas(item.fecha_prestamo) }}
+                    </template>
+
+                    <template v-slot:item.fechaFin="{ item }">
+                        {{ formatearFechas(item.fecha_devolucion) }}
+                    </template>
+
+                    <template v-slot:item.accion="{ item }">
+                        <v-icon small class="mr-2" v-on="on" v-bind="attrs"
+                            @click="MostrarDetalles(item)">mdi-text-box-search</v-icon>
+                    </template>
+
+                </v-data-table>
+
+            </v-container>
+
+            <br>
+        </v-card>
         <br>
-        <center>
-            <h5>Prestamos</h5>
-        </center>
-        <hr>
-        <v-container>
-
-            <v-data-table :headers="headers" :no-data-text="'No hay equipos para devolver'"
-                :items="prestamos" :hide-default-footer="true" class="tbl">
-
-                <template v-slot:item.id="{ item }">
-                    {{ item.id }}
-                </template>
-
-                <template v-slot:item.fechaInicio="{ item }">
-                    {{ formatearFechas(item.fecha_prestamo) }}
-                </template>
-
-                <template v-slot:item.fechaFin="{ item }">
-                    {{ formatearFechas(item.fecha_devolucion) }}
-                </template>
-
-                <template v-slot:item.accion="{ item }">
-                    <v-icon small class="mr-2" v-on="on" v-bind="attrs"
-                        @click="MostrarDetalles(item)">reviews</v-icon>
-                </template>
-
-            </v-data-table>
-
-        </v-container>
-
         <br>
-    </v-card>
-    <br>
-    <br>
 
 
-    <v-card class="mx-auto" max-width="890" v-if="tablaDetalle" elevation="15"
-    style="border: 5px solid green ; border-radius:20px;">
-    <hr>
-    <center>
-        <h5>Detalle de devolucion</h5>
-    </center>
-    <v-container>
+        <v-card class="mx-auto" max-width="890" v-if="tablaDetalle" elevation="15"
+            style="border: 5px solid green ; border-radius:20px;">
+            <hr>
+            <center>
+                <h5>Detalle de devolucion</h5>
+            </center>
+            <v-container>
 
-        <v-data-table :headers="headersDetalle" :items="detalleSeleccionado" class="tbl"
-            :hide-default-footer="true">
+                <v-data-table :headers="headersDetalle" :items="detalleSeleccionado" class="tbl"
+                    :hide-default-footer="true">
 
-            <template v-slot:item.serial="{ item }">
-                {{ item.serial }}
-            </template>
+                    <template v-slot:item.serial="{ item }">
+                        {{ item.serial }}
+                    </template>
 
-            <template v-slot:item.telefonica="{ item }">
-                {{ item.telefonica }}
-            </template>
+                    <template v-slot:item.telefonica="{ item }">
+                        {{ item.telefonica }}
+                    </template>
 
-            <template v-slot:item.marca="{ item }">
-                {{ item.marca }}
-            </template>
+                    <template v-slot:item.marca="{ item }">
+                        {{ item.marca }}
+                    </template>
 
-            <template v-slot:item.tipoEquipo="{ item }">
-                {{ item.tipoEquipo }}
-            </template>
+                    <template v-slot:item.tipoEquipo="{ item }">
+                        {{ item.tipoEquipo }}
+                    </template>
 
-            
-            <template v-slot:item.accion="{ item }">
-                <v-icon small class="mr-2" v-on="on" v-bind="attrs"
-                    @click="MostrarDialogoObservacion(item)">reviews</v-icon>
-            </template>
+
+                    <template v-slot:item.accion="{ item }">
+                        <v-icon small class="mr-2" v-on="on" v-bind="attrs"
+                            @click="MostrarDialogoObservacion(item)">reviews</v-icon>
+                    </template>
 
 
 
-        </v-data-table>
+                </v-data-table>
 
-        <v-dialog v-model="dialogActualizar" max-width="500px">
-            <v-card>
-                <v-card-title>
-                    <span class="text-h5">Confirmación de cambio</span>
-                </v-card-title>
-                <v-card-text>
-                    ¿Estás seguro de que quieres cambiar el estado de este prestamo?
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="red darken-1" text @click="closeAceptar()">
-                        Cancelar
-                    </v-btn>
-                    <v-btn color="blue darken-1" :disabled="dialogProgreso" :loading="dialogProgreso" text
-                        @click="ActualizarItem()">
-                        Aceptar
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+                <v-dialog v-model="dialogActualizar" max-width="500px">
+                    <v-card>
+                        <v-card-title>
+                            <span class="text-h5">Confirmación de cambio</span>
+                        </v-card-title>
+                        <v-card-text>
+                            ¿Estás seguro de que quieres cambiar el estado de este prestamo?
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="red darken-1" text @click="closeAceptar()">
+                                Cancelar
+                            </v-btn>
+                            <v-btn color="blue darken-1" :disabled="dialogProgreso" :loading="dialogProgreso" text
+                                @click="ActualizarItem()">
+                                Aceptar
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
 
-    </v-container>
+            </v-container>
 
-    <br>
-    <center>
+            <br>
+            <center>
 
-    </center>
-    <br>
-    <br>
-</v-card>
+            </center>
+            <br>
+            <br>
+        </v-card>
 
 
 
@@ -191,7 +191,7 @@
         <br>
         <br>
 
-        
+
 
     </div>
 </template>
@@ -214,7 +214,7 @@ export default {
             { text: 'accion', value: 'accion' },
 
         ],
-        headersDetalle:[
+        headersDetalle: [
             { text: 'Serial de telefonia', value: 'equipo.telefonica' },
             { text: 'Tipo', value: 'equipo.tipo.tipo' },
             { text: 'Marca', value: 'equipo.marca' },
@@ -239,6 +239,7 @@ export default {
         items: [],
         detalleSeleccionado: [],
         nameRules: [(v) => !!v || "Indique una observacion"],
+        idCurrentPrestamo: null
     }),
 
 
@@ -318,19 +319,20 @@ export default {
             });
         },
         MostrarDialogoObservacion() {
-    
+
             this.dialog = true;
             console.log('Detalle del prestamo seleccionado', this.detalleSeleccionado);
         },
 
         MostrarDetalles(item) {
+            this.idCurrentPrestamo = item.id;
             this.tablaDetalle = true;
             this.detalleSeleccionado = this.prestamos.find(prestamo => prestamo.id === item.id).prestamo_detalle;
-            console.log('xxxaa',this.detalleSeleccionado);
+            console.log('xxxaa', this.detalleSeleccionado);
         },
 
         mostrarObservacion(itemSeleccionado) {
-            if (itemSeleccionado !== this.items[0].id && itemSeleccionado !== this.items[2].id) {
+            if (itemSeleccionado !== this.items[0].id) {
                 this.mostrarCampoDeObservacion = true;
             } else {
                 this.mostrarCampoDeObservacion = false;
@@ -352,33 +354,37 @@ export default {
         },
 
         async confirmarEdit() {
-            const estadoEquipo = this.items.find(estadoEquipo => estadoEquipo.id == this.estadoSeleccionado);
-            console.log(estadoEquipo);
-            if (this.observacion.trim() === "" && estadoEquipo.estado.toLowerCase() != "bueno") {
-                Swal.fire("Error", "La observación es obligatoria", "error");
-                return;
-            } else {
-                try {
-                    let idDelEstado = this.estadoSeleccionado;
-                    let idDelEquipo = this.detalleSeleccionado[0].serial;
-                    console.log('serial a enviar', idDelEquipo);
-                    console.log('idEstado a enviar', idDelEstado);
-                    const paquete = {
-                        idPrestamo: parseInt(this.detalleSeleccionado[0].idPrestamo),
-                        equipos: [{ idEquipo: parseInt(idDelEquipo), idEstado: parseInt(idDelEstado), descripcion: this.observacion }]
+            if (this.idCurrentPrestamo != null) {
+                const estadoEquipo = this.items.find(estadoEquipo => estadoEquipo.id == this.estadoSeleccionado);
+                console.log(estadoEquipo);
+                if (this.observacion.trim() === "" && estadoEquipo.estado.toLowerCase() != "bueno") {
+                    Swal.fire("Error", "La observación es obligatoria", "error");
+                    return;
+                } else {
+                    try {
+                        let idDelEstado = this.estadoSeleccionado;
+                        let idDelEquipo = this.detalleSeleccionado[0].serial;
+                        console.log('serial a enviar', idDelEquipo);
+                        console.log('idEstado a enviar', idDelEstado);
+                        const paquete = {
+                            idPrestamo: parseInt(this.idCurrentPrestamo),
+                            equipos: [{ idEquipo: parseInt(idDelEquipo), idEstado: parseInt(idDelEstado), descripcion: this.observacion }]
+                        }
+                        await axios.put('http://localhost:62000/prestamos/devolucion', paquete).then(resp => {
+                            console.log(resp.data);
+                            Swal.fire('El equipo ha sido devuelto!', '', 'success');
+                            this.idCurrentPrestamo = null;
+                        }).catch(error => {
+                            console.log('Error de peticion' + error);
+                            Swal.fire('Error al devolver el equipo', '' + error, 'error')
+                        })
+                        this.dialog = false;
+                    } catch (error) {
+                        console.error('aqui', error);
                     }
-                    await axios.put('http://localhost:62000/prestamos/devolucion', paquete).then(resp => {
-                        console.log(resp.data);
-                        Swal.fire('El equipo ha sido devuelto!', '', 'success');
-                    }).catch(error => {
-                        console.log('Error de peticion' + error);
-                        Swal.fire('Error al devolver el equipo', '' + error, 'error')
-                    })
-                    this.dialog = false;
-                } catch (error) {
-                    console.error('aqui', error);
                 }
             }
+
         },
 
         formatearFechas(date) {

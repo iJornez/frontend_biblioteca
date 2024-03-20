@@ -183,6 +183,7 @@ export default {
         DetallesPrestamos: [],
         prestamos: [],
         prestamosFiltrados: [],
+        idCurrentPrestamo:null
 
     }),
     watch: {
@@ -260,13 +261,12 @@ export default {
             });
         },
         async ActualizarItem() {
-            try {
+            if(this.idCurrentPrestamo!=null){
+                try {
                 this.dialogProgreso = true;
                 let idActualizar = 2;
-                let idPrestamoActualizar = this.prestamos[0].id;
                 console.log('idEstado', idActualizar);
-                console.log('idPrestamo', idPrestamoActualizar);
-                await axios.put(`http://localhost:62000/prestamos/actualizar_estado/${idPrestamoActualizar}/${idActualizar}`)
+                await axios.put(`http://localhost:62000/prestamos/actualizar_estado/${this.idCurrentPrestamo}/${idActualizar}`)
                     .then(() => {
                         setTimeout(() => {
                             Swal.fire('Actualizacion exitosa', '', 'success');
@@ -277,6 +277,7 @@ export default {
                         setTimeout(() => {
                             window.location.reload();
                         }, 2000)
+                        this.idCurrentPrestamo=null;
                     }).catch(error => {
                         setTimeout(() => {
                             this.dialogActualizar = false;
@@ -300,6 +301,8 @@ export default {
                     window.location.reload();
                 }, 2000)
             }
+            }
+            
 
 
         },
@@ -312,6 +315,7 @@ export default {
         },
 
         MostrarDetalles(item) {
+            this.idCurrentPrestamo=item.id;
             this.detalles = true;
             this.DetalleSeleccionado = this.prestamos.find(prestamo => prestamo.id === item.id).prestamo_detalle;
             console.log('Detalles del prestamo seleccionado', this.DetallesPrestamos);

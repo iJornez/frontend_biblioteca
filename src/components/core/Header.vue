@@ -5,28 +5,28 @@
 
     <v-toolbar-title class="letra">
       <center>
-        <H1>Bienvenido {{ DatosUsuario.nombre}}</h1>
+        <H1>Bienvenido {{ DatosUsuario.nombre }}</h1>
       </center>
     </v-toolbar-title>
 
     <!-- Boton del cerrar sesion y del perfil -->
-    <div   style="position:absolute; margin-left:75%;"  >
-      <v-menu rounded  >
+    <div style="position:absolute; margin-left:75%;">
+      <v-menu rounded>
         <template v-slot:activator="{ on }">
-          <v-btn icon  v-on="on">
+          <v-btn icon v-on="on">
             <v-avatar style="margin-left: 100%;" color="brown" size="70">
               <img src="../../assets/PerfilUsuario.png" alt="">
             </v-avatar>
           </v-btn>
         </template>
         <v-card>
-          <v-list-item-content >
-            <div class="mx-auto text-center" >
-              <v-avatar color="brown" >
+          <v-list-item-content>
+            <div class="mx-auto text-center">
+              <v-avatar color="brown">
                 <img src="../../assets/PerfilUsuario.png" alt="">
               </v-avatar>
               <h3>{{ DatosUsuario.nombre }}</h3>
-              
+
               <v-divider class="my-3"></v-divider>
               <v-btn @click="PerfilUsuario" depressed rounded text>
                 Mi Perfil
@@ -64,7 +64,7 @@ export default {
     return {
       DatosUsuario: {
         iniciales: 'JD',
-        nombre: 'Bienvenido',
+        nombre: '',
       },
     }
   },
@@ -85,7 +85,10 @@ export default {
       window.location.reload();
     },
     PerfilUsuario() {
-
+      if (this.$route.path !== '/dashboard/miperfil') {
+        this.$router.push('/dashboard/miperfil');
+      }
+      
     }
   },
 }
@@ -96,7 +99,8 @@ export default {
   font-family: Georgia, 'Times New Roman', Times, serif;
   margin-top: 6px;
 }
-.barra{
+
+.barra {
   background-image: url("../../assets/fondoheader.jpg");
   background-size: 100% 100%;
   background-attachment: fixed;
