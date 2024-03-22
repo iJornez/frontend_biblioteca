@@ -42,7 +42,8 @@
                 <h5>Prestamos</h5>
             </center>
             <v-container>
-                <v-data-table :headers="headers" :items="prestamosFiltrados" class="tbl" :hide-default-footer="true">
+                <v-data-table :headers="headers" :items="prestamosFiltrados"
+                    :no-data-text="'No hay prestamos por entregar'" class="tbl" :hide-default-footer="true">
                     <template v-slot:item.telefonica="{ item }">
                         {{ item.id }}
                     </template>
@@ -183,7 +184,7 @@ export default {
         DetallesPrestamos: [],
         prestamos: [],
         prestamosFiltrados: [],
-        idCurrentPrestamo:null
+        idCurrentPrestamo: null
 
     }),
     watch: {
@@ -261,48 +262,48 @@ export default {
             });
         },
         async ActualizarItem() {
-            if(this.idCurrentPrestamo!=null){
+            if (this.idCurrentPrestamo != null) {
                 try {
-                this.dialogProgreso = true;
-                let idActualizar = 2;
-                console.log('idEstado', idActualizar);
-                await axios.put(`http://localhost:62000/prestamos/actualizar_estado/${this.idCurrentPrestamo}/${idActualizar}`)
-                    .then(() => {
-                        setTimeout(() => {
-                            Swal.fire('Actualizacion exitosa', '', 'success');
-                            this.dialogActualizar = false;
-                            this.DetallesPrestamos = [];
-                            this.dialogProgreso = false;
-                        }, 1000)
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 2000)
-                        this.idCurrentPrestamo=null;
-                    }).catch(error => {
-                        setTimeout(() => {
-                            this.dialogActualizar = false;
-                            Swal.fire('', 'No se pudo cambiar el estado del prestamo' + error, 'error');
-                            this.DetallesPrestamos = [];
-                            this.dialogProgreso = false;
-                        }, 1000)
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 2000)
-                    });
+                    this.dialogProgreso = true;
+                    let idActualizar = 2;
+                    console.log('idEstado', idActualizar);
+                    await axios.put(`http://localhost:62000/prestamos/actualizar_estado/${this.idCurrentPrestamo}/${idActualizar}`)
+                        .then(() => {
+                            setTimeout(() => {
+                                Swal.fire('Actualizacion exitosa', '', 'success');
+                                this.dialogActualizar = false;
+                                this.DetallesPrestamos = [];
+                                this.dialogProgreso = false;
+                            }, 1000)
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000)
+                            this.idCurrentPrestamo = null;
+                        }).catch(error => {
+                            setTimeout(() => {
+                                this.dialogActualizar = false;
+                                Swal.fire('', 'No se pudo cambiar el estado del prestamo' + error, 'error');
+                                this.DetallesPrestamos = [];
+                                this.dialogProgreso = false;
+                            }, 1000)
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000)
+                        });
 
-            } catch (error) {
-                setTimeout(() => {
-                    Swal.fire('No se pudo cambiar el estado' + error + 'error');
-                    console.error('Error:', error);
-                    this.closeAceptar();
-                    this.dialogProgreso = false;
-                }, 1000)
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000)
+                } catch (error) {
+                    setTimeout(() => {
+                        Swal.fire('No se pudo cambiar el estado' + error + 'error');
+                        console.error('Error:', error);
+                        this.closeAceptar();
+                        this.dialogProgreso = false;
+                    }, 1000)
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000)
+                }
             }
-            }
-            
+
 
 
         },
@@ -315,7 +316,7 @@ export default {
         },
 
         MostrarDetalles(item) {
-            this.idCurrentPrestamo=item.id;
+            this.idCurrentPrestamo = item.id;
             this.detalles = true;
             this.DetalleSeleccionado = this.prestamos.find(prestamo => prestamo.id === item.id).prestamo_detalle;
             console.log('Detalles del prestamo seleccionado', this.DetallesPrestamos);
