@@ -279,12 +279,9 @@ export default {
                             this.idCurrentPrestamo = null;
                             this.dialogActualizar = false;
                             this.dialogProgreso = false;
+                            this.tablaDetalle = false;
                             this.buscar();
                         }, 1000)
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 2000)
-
                     }).catch(error => {
                         console.log('Error de peticion' + error);
                         Swal.fire('Error al devolver el equipo', '' + error, 'error')

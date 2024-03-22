@@ -1,4 +1,5 @@
 <template>
+
   <div class="fondoGeneral">
     <div class="fondo">
       <v-row>
@@ -32,15 +33,26 @@
                         <span class="input-group-text"><i class="fas fa-user" color="black"> </i></span>
                       </div>
                       <input v-model="paqueteLogin.cedula" type="text" name="" class="form-control input_user"
-                        placeholder="Username">
+                        placeholder="Cédula">
                     </div>
-                    <div class="input-group mb-2">
-                      <div class="input-group-append">
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-key"></i></span>
                       </div>
-                      <input v-model="paqueteLogin.password" type="password" name="" class="form-control input_pass"
-                        placeholder="Password">
+
+                      <input v-model="paqueteLogin.password" class="form-control input_pass" placeholder="Contraseña"
+                        :type="showPassword ? 'text' : 'password'">
+
+                      <div class="input-group-append">
+                        <span class="input-group-text eye-icon" @click="toggleShowPassword">
+                          <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                        </span>
+                      </div>
                     </div>
+
+
+
+
                     <div class="d-flex justify-content-center mt-3 login_container" v-if="prueba == 0">
                       <vs-button dark class="btn login_btn" @click="login()">Iniciar Sesión</vs-button>
                     </div>
@@ -56,11 +68,7 @@
                 </div>
 
 
-                <div class="mt-4">
-                  <div class="d-flex justify-content-center links">
-                    <a href="#" style="color: black">¿olvidaste tu contraseña?</a>
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
@@ -69,31 +77,6 @@
                 <i class='bx bx-border-top' ></i>
               </vs-button>-->
         </v-dialog>
-
-        <v-col cols="6" xs="12">
-
-          <div>
-
-          </div>
-
-          <div>
-            <v-row>
-              <v-col cols="2" xs="0">
-              </v-col>
-              <v-col cols="8" xs="12">
-
-              </v-col>
-            </v-row>
-          </div>
-        </v-col>
-
-        <v-col cols="0">
-        </v-col>
-        <v-col cols="4" xs="0" class="mb-2 mr-sm-2 mb-sm-0" align-self="center">
-          <!-- <img  src="../assets/ini.png" style="max-width: 500px;
-        max-height:500;">-->
-
-        </v-col>
       </v-row>
     </div>
 
@@ -109,10 +92,23 @@
         <H1 class="recomended">RECOMENDADOS</H1>
       </center>
       <center>
-        <p><b>una seleccion especial para que no dejes de leer, escuchar, ver y jugar.</b></p>
+        <p><b>Una seleccion especial para que no dejes de leer, escuchar, ver y jugar.</b></p>
       </center>
 
-      <v-sheet class="mx-auto" elevation="8" max-width="1026">
+      <vs-card-group class="custom-card-margin">
+        <vs-card v-for="(image, index) in images" :key="index" @click="handleClick(image)">
+
+          <template #img>
+            <img :src="image" alt="Image">
+          </template>
+        </vs-card>
+      </vs-card-group>
+
+
+
+      <!-- 
+
+ <v-sheet class="mx-auto" elevation="8" max-width="1026">
         <v-slide-group v-model="model" class="pa-4" active-class="success" show-arrows>
           <v-slide-item v-for="n in items2" :key="n">
             <v-card class="ma-4" height="300" width="190">
@@ -124,147 +120,38 @@
           </v-slide-item>
         </v-slide-group>
       </v-sheet>
-      <v-row>
-        <v-card class="mx-auto carta" max-width="500">
-          <v-img class="white--text align-end" height="400px" width="500px"
-            src="https://www.bibliotecas.ugto.mx/pages/images/pdomicilio.png">
-            <v-card-title>Prestamo de libros</v-card-title>
-          </v-img>
+      -->
 
-          <v-card-subtitle class="pb-0">
-            ¿Cómo se pide prestado un libro en la biblioteca?
-          </v-card-subtitle>
+      <v-container fluid class="custom-card-margin mb-4">
+        <v-row justify="center">
+          <v-col cols="12" sm="6" md="4" v-for="(card, index) in cards" :key="index">
+            <v-card class="mx-auto" max-width="500">
+              <v-img class="white--text align-end" height="400px" width="500px" :src="card.imageUrl">
+                <v-card-title>{{ card.title }}</v-card-title>
+              </v-img>
 
-          <v-card-text class="text--primary">
+              <v-card-subtitle class="pb-0">
+                <b>{{ card.subtitle }}</b>
+              </v-card-subtitle>
 
-
-            <div>
-              La primera es de forma presencial en tu biblioteca más cercana, donde tendrás que presentar tu DNI y se te
-              dará el carné de forma inmediata. Otra vía consiste en rellenar el formulario online correspondiente a tu
-              red de bibliotecas.</div>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-btn color="orange" text>
-              Share
-            </v-btn>
-
-            <v-btn color="orange" text>
-              Explore
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+              <v-card-text class="text--primary">
+                <div :class="card.textClasses">
+                  {{ card.text }}
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
 
 
-        <v-card class="mx-auto carta1" max-width="500">
-          <v-img class="white--text align-end" height="400px" width="500px"
-            src="https://www.uaa.mx/portal/wp-content/uploads/2021/01/BOLETIN-10--1024x683.jpg">
-            <v-card-title>Prestamo de computadores</v-card-title>
-          </v-img>
-
-          <v-card-subtitle class="pb-0">
-            ¿Cómo se utilizan las computadoras en la biblioteca?
-          </v-card-subtitle>
-
-          <v-card-text class="text--primary">
-
-
-            <div>
-              Las computadoras públicas de la biblioteca permiten a los usuarios buscar una gran variedad de recursos
-              electrónicos. Las computadoras con recursos de la biblioteca son exclusivamente para buscar las
-              existencias
-              de la biblioteca y las bases de datos electrónicas seleccionadas. </div>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-btn color="orange" text>
-              Share
-            </v-btn>
-
-            <v-btn color="orange" text>
-              Explore
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-
-        <v-card class="mx-auto carta2" max-width="500">
-          <v-img class="white--text align-end" height="400px" width="500px"
-            src="https://images.pexels.com/photos/6803551/pexels-photo-6803551.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2">
-            <v-card-title>Prestamo de computadores</v-card-title>
-          </v-img>
-
-          <v-card-subtitle class="pb-0">
-            ¿Cómo se utilizan las computadoras en la biblioteca?
-          </v-card-subtitle>
-
-          <v-card-text class="text--primary">
-            <div :class="{ 'truncate-text': !showFullText, 'full-text': showFullText }">
-              Las computadoras públicas de la biblioteca permiten a los usuarios buscar una gran variedad de recursos
-              electrónicos. Las computadoras con recursos de la biblioteca son exclusivamente para buscar las
-              existencias
-              de la biblioteca y las bases de datos electrónicas seleccionadas.
-              Las computadoras públicas de la biblioteca permiten a los usuarios buscar una gran variedad de recursos
-              electrónicos. Las computadoras con recursos de la biblioteca son exclusivamente para buscar las
-              existencias
-              de la biblioteca y las bases de datos electrónicas seleccionadas.
-            </div>
-            <span v-if="!showFullText" class="leer-mas" @click="toggleFullText">Leer más</span>
-          </v-card-text>
-
-          <v-card-text class="text--primary">
-
-
-
-          </v-card-text>
-
-        </v-card>
-
-        <v-card class="mx-auto carta3" max-width="600">
-          <v-img class="white--text align-end" height="400px" width="500px"
-            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg">
-            <v-card-title>Top 10 Australian beaches</v-card-title>
-          </v-img>
-
-          <v-card-subtitle class="pb-0">
-            Number 10
-          </v-card-subtitle>
-
-          <v-card-text class="text--primary">
-            <div>Whitehaven Beach</div>
-
-            <div>Whitsunday Island, Whitsunday Islands</div>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-btn color="orange" text>
-              Share
-            </v-btn>
-
-            <v-btn color="orange" text>
-              Explore
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-row>
 
 
       <!-- Footer -->
-      <footer class="text-center text-lg-start text-muted  fondo">
+      <footer class="text-center text-lg-start text-muted fondo-final">
         <!-- Section: Social media -->
         <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
-          <!-- Left -->
-          <div class="me-5 d-none d-lg-block">
-            <a href="https://oferta.senasofiaplus.edu.co/sofia-oferta/">Biblioteca Sena</a>
-          </div>
-          <!-- Left -->
-
-          <!-- Right -->
-          <div>
-
-          </div>
-          <!-- Right -->
         </section>
-        <!-- Section: Social media -->
 
         <!-- Section: Links  -->
         <section class="">
@@ -274,7 +161,7 @@
               <!-- Grid column -->
               <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
                 <!-- Content -->
-                <h6 class="text-uppercase fw-bold mb-4" style="color:rgb(101, 99, 99);">
+                <h6 class="text-uppercase fw-bold mb-4" style="color:rgb(173, 255, 047);">
                   <i class=" color fas fa-gem me-3"></i> biblioteca prestacional SENA
                 </h6>
                 <p class=" color">
@@ -284,73 +171,51 @@
                   acceso equitativo a la información, el conocimiento y la cultura.
                 </p>
               </div>
-              <!-- Grid column -->
+
 
               <!-- Grid column -->
               <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
                 <!-- Links -->
-                <h6 class="color text-uppercase fw-bold mb-4" style="color:rgb(90, 88, 88);">
+                <h6 class="color text-uppercase fw-bold mb-4" style="color:rgb(173, 255, 047);">
                   Dispositivos
                 </h6>
                 <p class="color ">
-                  <a href="#!" class=" text-reset">Portatil</a>
+                  <b href="#!" class=" text-reset">Portatil</b>
                 </p>
                 <p class="color ">
-                  <a href="#!" class="color text-reset">Mouse</a>
+                  <b href="#!" class="color text-reset">Mouse</b>
                 </p>
                 <p class="color ">
-                  <a href="#!" class="color text-reset">Teclado</a>
+                  <b href="#!" class="color text-reset">Teclado</b>
                 </p>
                 <p class="color ">
-                  <a href="#!" class=" text-reset">cargador</a>
+                  <b href="#!" class=" text-reset">cargador</b>
                 </p>
               </div>
-              <!-- Grid column -->
 
-              <!-- Grid column -->
-              <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-                <!-- Links -->
-                <h6 class="color  text-uppercase fw-bold mb-4" style="color:rgb(89, 87, 87)">
-                  Useful links
-                </h6>
-                <p class="color ">
-                  <a href="#!" class=" text-reset">Pricing</a>
-                </p>
-                <p class="color ">
-                  <a href="#!" class="text-reset">Settings</a>
-                </p>
-                <p class="color ">
-                  <a href="#!" class="text-reset">Orders</a>
-                </p>
-                <p class="color ">
-                  <a href="#!" class="text-reset">Help</a>
-                </p>
-              </div>
-              <!-- Grid column -->
 
               <!-- Grid column -->
               <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
                 <!-- Links -->
-                <h6 class="text-uppercase fw-bold mb-4" style="color:rgb(95, 92, 92)">Contact</h6>
-                <p class="color "><i class="fas fa-home me-3"></i> Monteria</p>
+                <h6 class="text-uppercase fw-bold mb-4" style="color:rgb(173, 255, 047)">Contactanos</h6>
+                <p class="color "><i class="fas fa-home me-3"></i> Montería - Córdoba</p>
                 <p class="color ">
                   <i class="fas fa-envelope me-3"></i>
-                  biblioteca@gmail.com
+                  BibliotecaCCIT@gmail.com
                 </p>
                 <p class="color "><i class="fas fa-phone me-3"></i> 3043742255</p>
-                <p class="color "><i class="fas fa-print me-3"></i> 3298463567</p>
+                <p class="color "><i class="fas fa-print me-3"></i> 3206199534</p>
               </div>
-              <!-- Grid column -->
             </div>
-            <!-- Grid row -->
           </div>
         </section>
         <!-- Section: Links  -->
 
         <!-- Copyright -->
         <div class="color text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
-          2024 SENA:
-          <a class="text-reset fw-bold color" href="https://mdbootstrap.com/">biblioteca.com</a>
+          © 2024 SENA
+          <a class="text-reset fw-bold color"
+            href="https://oferta.senasofiaplus.edu.co/sofia-oferta/">Biblioteca.com</a>
         </div>
         <!-- Copyright -->
       </footer>
@@ -370,52 +235,90 @@ export default {
   data: () => ({
     items: [
       {
-        src: 'https://i0.wp.com/cms.babbel.news/wp-content/uploads/2022/02/Most_Beautiful_Libraries-1.png?resize=640%2C360',
+        src: 'https://images.pexels.com/photos/8199766/pexels-photo-8199766.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       },
       {
-        src: 'https://www.paho.org/sites/default/files/styles/max_1500x1500/public/2020-10/library-stock-image-1400x700.jpg?itok=HWcoUkYe',
+        src: 'https://images.pexels.com/photos/9572370/pexels-photo-9572370.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       },
       {
-        src: 'https://i0.wp.com/bibliotecasmedellin.gov.co/wp-content/uploads/2021/05/P1460649-1200x700.jpg',
+        src: 'https://images.pexels.com/photos/6344238/pexels-photo-6344238.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       },
       {
         src: 'https://images.ctfassets.net/p0qf7j048i0q/28DE1F50872A4C44989EFB1462A62680/5d50f64c7c063ebd58d633c8afe1281a/G824750478.jpg?w=3840&q=75&h=3840&fm=webp',
       },
 
     ],
+
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9a-gs4-KmgMoaGPeVegwjECwXHepBkFDuyA&usqp=CAU", "https://www.planetalector.com.mx/usuaris/thumbnails/libros/fotos/201/360/portada_cien-anos-de-soledad-2015_gabriel-garcia-marquez_201506221819.jpg",
+      "https://nidodelibros.com/wp-content/uploads/2021/07/9780525657606.jpeg", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDXmFLfr7vNZj9aXIImICTOVS3Swk6ASKBcQ&usqp=CAU", "https://m.media-amazon.com/images/I/61UTRIzO6vL._AC_UF1000,1000_QL80_.jpg",
+      'https://www.penguinlibros.com/co/2386270/juego-de-tronos-cancion-de-hielo-y-fuego-1.jpg', 'https://m.media-amazon.com/images/I/81MKQjxDI0L._AC_UF1000,1000_QL80_.jpg',
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnl3BTfMtFnWuVLjpGAHcGLhAKti7In4YCAQ&usqp=CAU',
+      'https://www.penguinlibros.com/co/1692450/el-mesias-de-dune-las-cronicas-de-dune-2.jpg',
+      'https://www.penguinlibros.com/co/1638921/memorias-de-una-geisha.jpg',
+      'https://m.media-amazon.com/images/I/51RN1twQZDL.jpg',
+      'https://www.adobe.com/es/express/create/cover/media_124eac7e2355d1342f03644c8392c494f40e9ee65.jpeg?width=400&format=jpeg&optimize=medium',
+
+    ],
+
+    cards: [
+      {
+        title: "Prestamo de libros",
+        subtitle: "¿Cómo se pide prestado un libro en la biblioteca?",
+        text: "La primera es de forma presencial en tu biblioteca más cercana, donde tendrás que presentar tu DNI y se te dará el carné de forma inmediata. Otra vía consiste en rellenar el formulario online correspondiente a tu red de bibliotecas.",
+        textClasses: "truncate-textt full-textt",
+        imageUrl: "https://www.bibliotecas.ugto.mx/pages/images/pdomicilio.png"
+      },
+      {
+        title: "Prestamo de computadores",
+        subtitle: "¿Cómo se utilizan las computadoras en la biblioteca?",
+        text: "Las computadoras públicas de la biblioteca permiten a los usuarios buscar una gran variedad de recursos electrónicos. Las computadoras con recursos de la biblioteca son exclusivamente para buscar las existencias de la biblioteca y las bases de datos electrónicas seleccionadas.",
+        textClasses: "truncate-text1 full-text1",
+        imageUrl: "https://www.uaa.mx/portal/wp-content/uploads/2021/01/BOLETIN-10--1024x683.jpg"
+      },
+      {
+        title: "Horario de prestamos",
+        subtitle: "¿Cuál es el horario para reclamar tus prestamos?",
+        text: "Los préstamos de computadoras están disponibles en la biblioteca en los siguientes horarios: Lunes a viernes: 6:00 am - 12:30 pm y 2:00 pm - 9:00 pm.- Sábados 6:00 am - 2:00 pm.",
+        textClasses: "truncate-text full-text",
+        imageUrl: "https://img.freepik.com/fotos-premium/reloj-pie-haciendo-tictac-rincon-olvidado-antigua-biblioteca_979495-3549.jpg"
+      },
+    ],
+
+    /*
     items2: [
       {
         src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9a-gs4-KmgMoaGPeVegwjECwXHepBkFDuyA&usqp=CAU',
       },
       {
-        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc6yU2trrLbzY2JzeQv2o5N-aDruqyy0dubg&usqp=CAU',
+        src: 'https://www.planetalector.com.mx/usuaris/thumbnails/libros/fotos/201/360/portada_cien-anos-de-soledad-2015_gabriel-garcia-marquez_201506221819.jpg',
       },
       {
-        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS94JipTW9DDr2lJzTVFqeMlSlzA169Lry1pA&usqp=CAU',
+        src: 'https://nidodelibros.com/wp-content/uploads/2021/07/9780525657606.jpeg',
       },
       {
         src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDXmFLfr7vNZj9aXIImICTOVS3Swk6ASKBcQ&usqp=CAU',
       },
       {
-        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYN48CM8uC2eWUoCOyyqu-TlwMVLigPAD3Ug&usqp=CAU',
+        src: 'https://m.media-amazon.com/images/I/61UTRIzO6vL._AC_UF1000,1000_QL80_.jpg',
       },
       {
-        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVqNZ0xxKYIizUkGDwEegbaibggcoknAovIg&usqp=CAU',
+        src: 'https://www.penguinlibros.com/co/2386270/juego-de-tronos-cancion-de-hielo-y-fuego-1.jpg',
       },
       {
-        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgXMi8gmglolRBQE9tiUnagKhyYCF_1zphAQ&usqp=CAU',
+        src: 'https://m.media-amazon.com/images/I/81MKQjxDI0L._AC_UF1000,1000_QL80_.jpg',
       },
       {
         src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnl3BTfMtFnWuVLjpGAHcGLhAKti7In4YCAQ&usqp=CAU',
       },
       {
-        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQdyI0J2pU_5wR2jl81BHxfcre8xS0sOMs7w&usqp=CAU',
+        src: 'https://www.penguinlibros.com/co/1692450/el-mesias-de-dune-las-cronicas-de-dune-2.jpg',
       },
       {
-        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ_YkNcvSleK8-6bramWL53ltAjnT9hUiO-Q&usqp=CAU',
+        src: 'https://www.penguinlibros.com/co/1638921/memorias-de-una-geisha.jpg',
       },
       {
-        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvXBqEZE6TdCgIF1rFAXuomq6-oHi-jeDe8w&usqp=CAU',
+        src: 'https://m.media-amazon.com/images/I/51RN1twQZDL.jpg',
       },
       {
         src: 'https://www.adobe.com/es/express/create/cover/media_124eac7e2355d1342f03644c8392c494f40e9ee65.jpeg?width=400&format=jpeg&optimize=medium',
@@ -423,7 +326,8 @@ export default {
 
 
 
-    ],
+    ],*/
+
     icons: [
       'mdi-facebook',
       'mdi-twitter',
@@ -447,17 +351,33 @@ export default {
       cedula: null,
       password: null
     },
-    showFullText: false,
+    showPassword: false,
+    showFullText: [false, false, false, false],
 
   }),
 
 
 
   methods: {
+    toggleShowPassword() {
+      this.showPassword = !this.showPassword;
+    },
 
     toggleFullText() {
       // Método para cambiar el estado de showFullText
       this.showFullText = !this.showFullText;
+    },
+    toggleFullText1() {
+      // Método para cambiar el estado de showFullText
+      this.showFullTexta = !this.showFullTexta;
+    },
+    toggleFullTextt() {
+      // Método para cambiar el estado de showFullText
+      this.showFullTextt = !this.showFullTextt;
+    },
+    toggleFullTextc() {
+      // Método para cambiar el estado de showFullText
+      this.showFullTextc = !this.showFullTextc;
     },
     login() {
       var vm = this;
@@ -494,7 +414,20 @@ export default {
 }
 </script>
 
+
 <style scoped>
+* {
+  box-sizing: border-box;
+
+
+}
+
+.eye-icon {
+  cursor: pointer;
+}
+
+
+
 .iniciopre {
   top: 30px;
 }
@@ -606,36 +539,15 @@ export default {
 }
 
 .carta {
-  position: absolute;
-  left: 100px;
-  top: 1250px;
+  margin-bottom: 20px;
+  /* Espacio entre tarjetas */
 
 
 }
 
-.carta1 {
-
-  position: absolute;
-  left: 770px;
-  top: 1250px;
-
-}
-
-.carta2 {
-
-  position: absolute;
-  left: 1370px;
-  top: 1250px;
-
-
-}
-
-.carta3 {
-
-  position: absolute;
-  left: 1970px;
-  top: 1250px;
-
+.v-card__img {
+  object-fit: cover;
+  height: 300px;
 }
 
 footer {
@@ -653,25 +565,54 @@ footer {
 .v-card {
   height: 600px;
   /* Ajusta según sea necesario */
-  overflow: hidden;
+  overflow: auto;
 }
 
-.truncate-text {
+.truncate-textt,
+.truncate-text1,
+.truncate-text,
+.truncate-text3 {
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  /* Ajusta según sea necesario */
-  -webkit-box-orient: vertical;
 }
 
-.full-text {
+.full-textt,
+.full-text1,
+.full-text,
+.full-text3 {
+  white-space: normal;
   overflow: visible;
-  display: block;
+  text-overflow: clip;
 }
 
-.leer-mas {
-  cursor: pointer;
-  color: blue;
+
+.custom-card-margin {
+  margin-bottom: 100px;
+
+}
+
+.fondo-final {
+  margin-top: -900px;
+}
+
+@media only screen and (max-width: 600px) {
+  .logo {
+    position: absolute;
+
+    top: 15px;
+    left: -10px;
+    width: 135px;
+    height: 90px;
+  }
+
+  .letras {
+    position: absolute;
+    top: 1px;
+    left: 105px;
+    width: 200px;
+    height: 180px;
+    color: black;
+  }
 }
 </style>

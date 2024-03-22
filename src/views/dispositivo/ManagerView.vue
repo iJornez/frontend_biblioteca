@@ -1,7 +1,7 @@
 <template>
   <v-main>
     
-    <v-container style="margin-top: 200px; margin-left:35%; border-radius:20px; border:4px solid green ; width:1000px; background-color:white">
+    <v-container class="mx-auto" style="margin-top: 200px; margin-left:35%; border-radius:20px; border:4px solid green ; width:1000px; background-color:white">
       <v-select
         v-model="select"
         :items="items"
@@ -13,6 +13,7 @@
       <br>
       <br>
     </v-container>
+
   </v-main>
 </template>
 <script>

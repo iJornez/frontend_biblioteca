@@ -274,10 +274,9 @@ export default {
                                 this.dialogActualizar = false;
                                 this.DetallesPrestamos = [];
                                 this.dialogProgreso = false;
+                                this.detalles = false;
+                                this.buscar();
                             }, 1000)
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 2000)
                             this.idCurrentPrestamo = null;
                         }).catch(error => {
                             setTimeout(() => {
@@ -386,4 +385,4 @@ h5 {
 .tbl {
     background-color: #f2f2f2;
 }
-</style>
+</style>import { faL } from '@fortawesome/free-solid-svg-icons';
