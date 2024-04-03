@@ -332,7 +332,6 @@ export default {
               if (result.isConfirmed) {
                 if (EquiposDisponibles === 0) {
                   Swal.fire('No hay equipos disponibles para este tipo.', '', 'error');
-                  this.limpiarDatos();
                 } else {
                   this.continuarAlmacenamiento();
                 }
@@ -373,8 +372,6 @@ export default {
         console.log('Paquete a enviar para el préstamo', this.datosPreGuardados);
         localStorage.setItem('datosPreGuardados', JSON.stringify(this.datosPreGuardados));
         localStorage.setItem('mostrarTabla', JSON.stringify(this.MostrarTabla));
-        this.limpiarDatos();
-        this.$refs.form.resetValidation();
 
         this.menu1 = false;
         this.menu2 = false;

@@ -11,17 +11,30 @@ import Vuesax from 'vuesax'
 import 'vuesax/dist/vuesax.css' //Vuesax styles
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import vuescroll from "vuescroll";
+// import Toast from 'vue-toastification'
+// import 'vue-toastification/dist/index.css'
 
 Vue.use(require('vue-moment'));
 
 // You can set global config here.
 Vue.use(vuescroll, {
-    ops: {
-        // The global config
-    },
-    name: "myScroll", // customize component name, default -> vueScroll
+  ops: {
+    // The global config
+  },
+  name: "myScroll", // customize component name, default -> vueScroll
 });
 
+// Vue.use(Toast, {
+//   position: 'top-right',
+//   timeout: 3000,
+//   closeOnClick: true,
+//   pauseOnHover: false,
+//   draggable: false,
+//   draggablePercent: 0.6,
+//   showCloseButtonOnHover: false,
+//   hideProgressBar: false,
+//   closeButton: false,
+// })
 
 //Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)

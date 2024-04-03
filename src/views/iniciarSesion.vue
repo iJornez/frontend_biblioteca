@@ -230,6 +230,8 @@
 <script>
 
 import axios from 'axios';
+import Swal from 'sweetalert2';
+
 export default {
   name: 'App',
   data: () => ({
@@ -381,21 +383,27 @@ export default {
     },
     login() {
       var vm = this;
-      console.log('Paquete a enviar', this.paqueteLogin);
-      axios.post('http://localhost:62000/auth/login', vm.paqueteLogin).then(response => {
-        if (response.data == "") {
-          console.log('Esta vacio!');
-          this.errorMessages();
-        } else {
+      if (!vm.paqueteLogin.cedula || !vm.paqueteLogin.password || vm.paqueteLogin.cedula.trim() === '' || vm.paqueteLogin.password.trim() === '') {
+        Swal.fire('Por favor ingresa credenciales validas', '', 'warning');
+      } else {
+        console.log('Paquete a enviar', this.paqueteLogin);
+        axios.post('http://localhost:62000/auth/login', vm.paqueteLogin).then(response => {
+          // this.$toast.success('Bienvenido');
           vm.$store.commit('setusuario', response.data);
           vm.$router.push('dashboard/welcome');
           console.log(vm.$store.state.permiso);
-        }
+        }).catch(error => {
+          if (error.response.status === 401) {
+            Swal.fire('Credenciales incorrectas', '', 'error');
+            // this.$toast.error('error');
+          } else {
+            console.log('Error en la solicitud:', error);
+            Swal.fire('Error', 'Hubo un problema al procesar la solicitud', 'error');
+          }
+        })
 
+      }
 
-      }).catch(error => {
-        console.log(error);
-      })
 
 
 
@@ -615,4 +623,9 @@ footer {
     color: black;
   }
 }
-</style>
+</style>import { $toast } from 'vue/types/umd';
+import { $toast } from 'vue/types/umd';
+import { $toast } from 'vue/types/umd';
+import { error } from 'console';
+import { $toast } from 'vue/types/umd';
+
